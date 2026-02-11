@@ -1,13 +1,155 @@
-<!DOCTYPE html>
-    <html>
+import streamlit as st
+import pandas as pd
+import math
+
+# --- 1. CONFIGURARE PENTRU MOBIL & PWA ---
+st.set_page_config(
+    page_title="Predictor Pro GG", 
+    page_icon="⚽", 
+    layout="wide",
+    initial_sidebar_state="collapsed"
+)
+
+# Meta-tag-uri pentru a forța browserul să se comporte ca o aplicație nativă
+st.markdown("""
     <head>
-      <meta charset='utf-8'>
-      <meta name='viewport' content='width=device-width'>
-      <title>Privacy Policy</title>
-      <style> body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; padding:1em; } </style>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <meta name="theme-color" content="#e63946">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     </head>
-    <body>
-    <strong>Privacy Policy</strong><p>This privacy policy applies to the Predictor Pro: GG &amp; Goal Oracle app (hereby referred to as "Application") for mobile devices that was created by JokerBetting (hereby referred to as "Service Provider") as a Commercial service. This service is intended for use "AS IS".</p><br><strong>Information Collection and Use</strong><p>The Application collects information when you download and use it. This information may include information such as </p><ul><li>Your device's Internet Protocol address (e.g. IP address)</li><li>The pages of the Application that you visit, the time and date of your visit, the time spent on those pages</li><li>The time spent on the Application</li><li>The operating system you use on your mobile device</li></ul><p></p><br><p>The Application does not gather precise information about the location of your mobile device.</p><div style="display: none;"><p>The Application collects your device's location, which helps the Service Provider determine your approximate geographical location and make use of in below ways:</p><ul><li>Geolocation Services: The Service Provider utilizes location data to provide features such as personalized content, relevant recommendations, and location-based services.</li><li>Analytics and Improvements: Aggregated and anonymized location data helps the Service Provider to analyze user behavior, identify trends, and improve the overall performance and functionality of the Application.</li><li>Third-Party Services: Periodically, the Service Provider may transmit anonymized location data to external services. These services assist them in enhancing the Application and optimizing their offerings.</li></ul></div><br><p>The Service Provider may use the information you provided to contact you from time to time to provide you with important information, required notices and marketing promotions.</p><br><p>For a better experience, while using the Application, the Service Provider may require you to provide us with certain personally identifiable information, including but not limited to iroveanup@yahoo.com. The information that the Service Provider request will be retained by them and used as described in this privacy policy.</p><br><strong>Third Party Access</strong><p>Only aggregated, anonymized data is periodically transmitted to external services to aid the Service Provider in improving the Application and their service. The Service Provider may share your information with third parties in the ways that are described in this privacy statement.</p><div><br><p>Please note that the Application utilizes third-party services that have their own Privacy Policy about handling data. Below are the links to the Privacy Policy of the third-party service providers used by the Application:</p><ul><li><a href="https://www.google.com/policies/privacy/" target="_blank" rel="noopener noreferrer">Google Play Services</a></li><li><a href="https://support.google.com/admob/answer/6128543?hl=en" target="_blank" rel="noopener noreferrer">AdMob</a></li><li><a href="https://firebase.google.com/support/privacy" target="_blank" rel="noopener noreferrer">Google Analytics for Firebase</a></li><li><a href="https://firebase.google.com/support/privacy/" target="_blank" rel="noopener noreferrer">Firebase Crashlytics</a></li><li><a href="https://www.facebook.com/about/privacy/update/printable" target="_blank" rel="noopener noreferrer">Facebook</a></li><li><a href="https://matomo.org/privacy-policy/" target="_blank" rel="noopener noreferrer">Matomo</a></li><li><a href="https://clicky.com/terms#privacy" target="_blank" rel="noopener noreferrer">Clicky</a></li><li><a href="https://privacy.oath.com" target="_blank" rel="noopener noreferrer">Flurry Analytics</a></li><li><a href="https://www.appodeal.com/home/privacy-policy/" target="_blank" rel="noopener noreferrer">Appodeal</a></li><li><a href="https://usefathom.com/privacy/" target="_blank" rel="noopener noreferrer">Fathom Analytics</a></li><li><a href="https://unity3d.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer">Unity</a></li><li><a href="https://www.sdkbox.com/privacy" target="_blank" rel="noopener noreferrer">SDKBOX</a></li><li><a href="https://gameanalytics.com/privacy" target="_blank" rel="noopener noreferrer">GameAnalytics</a></li><li><a href="https://onesignal.com/privacy_policy" target="_blank" rel="noopener noreferrer">One Signal</a></li><li><a href="https://expo.io/privacy" target="_blank" rel="noopener noreferrer">Expo</a></li><li><a href="https://sentry.io/privacy/" target="_blank" rel="noopener noreferrer">Sentry</a></li><li><a href="https://www.applovin.com/privacy/" target="_blank" rel="noopener noreferrer">AppLovin</a></li><li><a href="https://vungle.com/privacy/" target="_blank" rel="noopener noreferrer">Vungle</a></li><li><a href="https://www.startapp.com/privacy/" target="_blank" rel="noopener noreferrer">StartApp</a></li><li><a href="https://www.adcolony.com/privacy-policy/" target="_blank" rel="noopener noreferrer">AdColony</a></li><li><a href="https://amplitude.com/privacy" target="_blank" rel="noopener noreferrer">Amplitude</a></li><li><a href="https://www.adjust.com/terms/privacy-policy" target="_blank" rel="noopener noreferrer">Adjust</a></li><li><a href="https://www.mapbox.com/legal/privacy" target="_blank" rel="noopener noreferrer">Mapbox</a></li><li><a href="https://godotengine.org/privacy-policy" target="_blank" rel="noopener noreferrer">Godot</a></li><li><a href="https://segment.com/legal/privacy/" target="_blank" rel="noopener noreferrer">Segment</a></li><li><a href="https://mixpanel.com/legal/privacy-policy/" target="_blank" rel="noopener noreferrer">Mixpanel</a></li><li><a href="https://www.revenuecat.com/privacy" target="_blank" rel="noopener noreferrer">RevenueCat</a></li><li><a href="https://clerk.com/privacy" target="_blank" rel="noopener noreferrer">Clerk</a></li><li><a href="https://adapty.io/privacy" target="_blank" rel="noopener noreferrer">Adapty</a></li><li><a href="https://configcat.com/policies/privacy/" target="_blank" rel="noopener noreferrer">ConfigCat</a></li><li><a href="https://www.instabug.com/privacy" target="_blank" rel="noopener noreferrer">Instabug</a></li></ul></div><br><p>The Service Provider may disclose User Provided and Automatically Collected Information:</p><ul><li>as required by law, such as to comply with a subpoena, or similar legal process;</li><li>when they believe in good faith that disclosure is necessary to protect their rights, protect your safety or the safety of others, investigate fraud, or respond to a government request;</li><li>with their trusted services providers who work on their behalf, do not have an independent use of the information we disclose to them, and have agreed to adhere to the rules set forth in this privacy statement.</li></ul><p></p><br><div><strong>Use of Artificial Intelligence</strong><p>The Application uses Artificial Intelligence (AI) technologies to enhance user experience and provide certain features. The AI components may process user data to deliver personalized content, recommendations, or automated functionalities. All AI processing is performed in accordance with this privacy policy and applicable laws. If you have questions about the AI features or data processing, please contact the Service Provider.</p><br></div><strong>Opt-Out Rights</strong><p>You can stop all collection of information by the Application easily by uninstalling it. You may use the standard uninstall processes as may be available as part of your mobile device or via the mobile application marketplace or network.</p><br><strong>Data Retention Policy</strong><p>The Service Provider will retain User Provided data for as long as you use the Application and for a reasonable time thereafter. If you'd like them to delete User Provided Data that you have provided via the Application, please contact them at iroveanup@yahoo.com and they will respond in a reasonable time.</p><br><strong>Children</strong><p>The Service Provider does not use the Application to knowingly solicit data from or market to children under the age of 13.</p><div><br><p>The Application does not address anyone under the age of 13. The Service Provider does not knowingly collect personally identifiable information from children under 13 years of age. In the case the Service Provider discover that a child under 13 has provided personal information, the Service Provider will immediately delete this from their servers. If you are a parent or guardian and you are aware that your child has provided us with personal information, please contact the Service Provider (iroveanup@yahoo.com) so that they will be able to take the necessary actions.</p></div><!----><br><strong>Security</strong><p>The Service Provider is concerned about safeguarding the confidentiality of your information. The Service Provider provides physical, electronic, and procedural safeguards to protect information the Service Provider processes and maintains.</p><br><strong>Changes</strong><p>This Privacy Policy may be updated from time to time for any reason. The Service Provider will notify you of any changes to the Privacy Policy by updating this page with the new Privacy Policy. You are advised to consult this Privacy Policy regularly for any changes, as continued use is deemed approval of all changes.</p><br><p>This privacy policy is effective as of 2026-02-11</p><br><strong>Your Consent</strong><p>By using the Application, you are consenting to the processing of your information as set forth in this Privacy Policy now and as amended by us.</p><br><strong>Contact Us</strong><p>If you have any questions regarding privacy while using the Application, or have questions about the practices, please contact the Service Provider via email at iroveanup@yahoo.com.</p><hr><p>This privacy policy page was generated by <a href="https://app-privacy-policy-generator.nisrulz.com/" target="_blank" rel="noopener noreferrer">App Privacy Policy Generator</a></p>
-    </body>
-    </html>
-      
+    <style>
+        /* Fundal și fonturi */
+        .stApp { background-color: #ffffff; }
+        
+        /* Header stilizat */
+        .main-header {
+            background-color: #e63946;
+            color: white;
+            padding: 15px;
+            border-radius: 0 0 15px 15px;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        /* Carduri rezultate */
+        .main-card {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 12px;
+            border-top: 5px solid #e63946;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            margin-bottom: 15px;
+        }
+
+        /* Buton Mare de Mobil */
+        .stButton>button {
+            width: 100% !important;
+            background-color: #e63946 !important;
+            color: white !important;
+            border-radius: 10px !important;
+            font-weight: bold !important;
+            height: 3.5em !important;
+            font-size: 1.1rem !important;
+            border: none !important;
+            box-shadow: 0 4px 10px rgba(230, 57, 70, 0.3);
+        }
+
+        /* Metricile compacte */
+        [data-testid="stMetricValue"] {
+            font-size: 1.8rem !important;
+            color: #e63946 !important;
+        }
+
+        /* Eliminare spații inutile pe mobil */
+        .block-container { padding-top: 1rem !important; }
+        footer {display: none !important;}
+        #MainMenu {visibility: hidden;}
+    </style>
+    """, unsafe_allow_html=True)
+
+# --- 2. BAZA DE DATE LIGI ---
+CAMPIONATE = {
+    "🏴󠁧󠁢󠁥󠁮󠁧󠁿 Anglia - Premier League": "E0",
+    "🏴󠁧󠁢󠁥󠁮󠁧󠁿 Anglia - Championship": "E1",
+    "🇪🇸 Spania - La Liga": "SP1",
+    "🇮🇹 Italia - Serie A": "I1",
+    "🇩🇪 Germania - Bundesliga": "D1",
+    "🇫🇷 Franța - Ligue 1": "F1",
+    "🇳🇱 Olanda - Eredivisie": "N1",
+    "🇧🇪 Belgia - Pro League": "B1",
+    "🇵🇹 Portugalia - Liga I": "P1",
+    "🇹🇷 Turcia - Super Lig": "T1",
+    "🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scoția - Premiership": "SC0",
+    "🇦🇹 Austria - Bundesliga": "A1",
+    "🇬🇷 Grecia - Super League": "G1"
+}
+
+@st.cache_data(ttl=3600)
+def incarca_date(cod, sezon):
+    url = f"https://www.football-data.co.uk/mmz4281/{sezon}/{cod}.csv"
+    try:
+        df = pd.read_csv(url)
+        df = df[['HomeTeam', 'AwayTeam', 'FTHG', 'FTAG']].dropna()
+        at_g = df.groupby('HomeTeam')['FTHG'].mean()
+        at_o = df.groupby('AwayTeam')['FTAG'].mean()
+        echipe = sorted(df['HomeTeam'].unique().astype(str))
+        return {e: (at_g.get(e, 0) + at_o.get(e, 0)) / 2 for e in echipe}
+    except:
+        return None
+
+def poisson(m, k):
+    if m <= 0: return 0
+    return (math.pow(m, k) * math.exp(-m)) / math.factorial(k)
+
+# --- 3. INTERFAȚĂ ---
+st.markdown('<div class="main-header"><h1>PREDICTOR GOAL ⚽</h1></div>', unsafe_allow_html=True)
+
+# Sidebar pentru setări (ascuns default pe mobil)
+with st.sidebar:
+    st.subheader("⚙️ Configurare")
+    sezon = st.selectbox("Alege Sezonul", ["2425", "2526"], index=0)
+    liga_nume = st.selectbox("Campionat", list(CAMPIONATE.keys()))
+    st.info("Datele se actualizează automat la fiecare oră.")
+
+date = incarca_date(CAMPIONATE[liga_nume], sezon)
+
+if date:
+    # Container Selecție Echipe
+    st.markdown('<div class="main-card">', unsafe_allow_html=True)
+    g = st.selectbox("🏠 Echipa Gazdă", list(date.keys()))
+    o = st.selectbox("🚀 Echipa Oaspete", list(date.keys()))
+    st.markdown('</div>', unsafe_allow_html=True)
+
+    if st.button("CALCULEAZĂ PREDICȚIA"):
+        if g == o:
+            st.error("Selectează echipe diferite!")
+        else:
+            m_g, m_o = date[g], date[o]
+            m_total = m_g + m_o
+            
+            # Calcul Probabilități
+            p_peste = (1 - sum([poisson(m_total, i) for i in range(3)])) * 100
+            p_gg = (1 - poisson(m_g, 0)) * (1 - poisson(m_o, 0)) * 100
+
+            # Afișare Metrică GG și Goluri
+            col1, col2 = st.columns(2)
+            with col1:
+                st.metric("Peste 2.5", f"{p_peste:.1f}%")
+                st.progress(min(int(p_peste), 100))
+            with col2:
+                st.metric("Șansă GG", f"{p_gg:.1f}%")
+                st.progress(min(int(p_gg), 100))
+
+            st.write("---")
+            
+            # Scoruri Probabile stilizate pentru mobil
+            st.subheader("🎯 Profeții Scor")
+            scoruri = []
+            for h in range(4):
+                for a in range(4):
+                    prob = (poisson(m_g, h) * poisson(m_o, a)) * 100
+                    scoruri.append((f"{h} - {a}", prob))
+            
+            scoruri = sorted(scoruri, key=lambda x: x[1], reverse=True)[:3]
