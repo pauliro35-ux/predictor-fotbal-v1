@@ -6,64 +6,79 @@
     <title>Predictor Pro GG - Shadow Hunter</title>
     <style>
         body { 
-            font-family: 'Segoe UI', sans-serif; 
-            background-color: #0f0f0f; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: #0b0b0b; 
             color: #ffffff; 
             margin: 0; 
             display: flex; 
             justify-content: center; 
             align-items: center; 
-            height: 100vh;
+            min-height: 100vh;
         }
         .app-card { 
-            background: #1a1a1a; 
+            background: #161616; 
             width: 90%; 
-            max-width: 380px; 
-            padding: 20px; 
+            max-width: 400px; 
+            padding: 0 0 25px 0; 
             border-radius: 20px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8); 
-            border: 1px solid #333; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.9); 
+            border: 1px solid #2a2a2a; 
             text-align: center;
+            overflow: hidden;
         }
         .header { 
-            background: linear-gradient(135deg, #d32f2f, #8b0000); 
-            margin: -20px -20px 20px -20px; 
-            padding: 25px; 
-            border-radius: 20px 20px 0 0; 
+            background: linear-gradient(135deg, #ff1f1f, #8b0000); 
+            padding: 30px; 
+            margin-bottom: 20px;
         }
-        h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; font-weight: 900; }
-        select { 
+        h1 { margin: 0; font-size: 1.5rem; text-transform: uppercase; font-weight: 900; letter-spacing: 1px; }
+        .input-group { padding: 0 25px; text-align: left; }
+        label { display: block; margin: 10px 0 5px; font-size: 0.85rem; color: #888; text-transform: uppercase; }
+        
+        input, select { 
             width: 100%; 
             padding: 12px; 
-            margin: 8px 0; 
+            margin-bottom: 12px;
             border-radius: 8px; 
-            background: #252525; 
+            background: #222; 
             color: white; 
-            border: 1px solid #444; 
+            border: 1px solid #333; 
+            box-sizing: border-box;
+            transition: 0.3s;
         }
+        input:focus { border-color: #ff1f1f; outline: none; background: #282828; }
+
         button { 
-            width: 100%; 
+            width: calc(100% - 50px); 
             padding: 15px; 
-            margin-top: 15px; 
-            background: #d32f2f; 
+            margin-top: 10px; 
+            background: #ff1f1f; 
             color: white; 
             border: none; 
             border-radius: 8px; 
             font-weight: bold; 
             font-size: 1rem;
             cursor: pointer;
+            text-transform: uppercase;
+            transition: 0.2s;
         }
+        button:hover { background: #d32f2f; transform: translateY(-2px); }
+        button:disabled { background: #555; cursor: not-allowed; transform: none; }
+
         #result-box { 
-            margin-top: 20px; 
+            margin: 20px 25px 0 25px; 
             padding: 15px; 
-            background: #222; 
-            border-radius: 10px; 
+            background: #1d1d1d; 
+            border-radius: 12px; 
             display: none; 
-            border-left: 5px solid #00ff88; 
+            border-left: 4px solid #00ff88; 
             text-align: left;
+            animation: fadeIn 0.5s ease-in;
         }
-        .res-line { margin: 5px 0; font-size: 0.95rem; }
-        .highlight { color: #00ff88; font-weight: bold; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .res-line { margin: 8px 0; font-size: 0.95rem; display: flex; justify-content: space-between; }
+        .highlight { color: #00ff88; font-weight: bold; text-shadow: 0 0 10px rgba(0,255,136,0.3); }
     </style>
 </head>
 <body>
@@ -71,43 +86,80 @@
     <div class="app-card">
         <div class="header">
             <h1>Predictor Goal ⚽</h1>
-            <small>AI Shadow Hunter v1.0</small>
+            <small>AI Shadow Hunter v1.5 - Multi-League</small>
         </div>
         
-        <label>Alege Liga:</label>
-        <select id="liga">
-            <option value="RO">România - Superliga</option>
-            <option value="EN">Anglia - Premier League</option>
-            <option value="ES">Spania - La Liga</option>
-        </select>
+        <div class="input-group">
+            <label>Competiție / Ligă</label>
+            <input list="lista-ligi" id="liga" placeholder="Caută liga...">
+            <datalist id="lista-ligi"></datalist>
 
-        <input type="text" id="home" placeholder="Echipa Gazdă" style="width:92%; padding:12px; margin:8px 0; border-radius:8px; border:1px solid #444; background:#252525; color:white;">
-        <input type="text" id="away" placeholder="Echipa Oaspete" style="width:92%; padding:12px; margin:8px 0; border-radius:8px; border:1px solid #444; background:#252525; color:white;">
+            <label>Echipa Gazdă</label>
+            <input type="text" id="home" placeholder="Nume echipă">
 
-        <button onclick="genereaza()">CALCULEAZĂ PREDICȚIA</button>
+            <label>Echipa Oaspete</label>
+            <input type="text" id="away" placeholder="Nume echipă">
+
+            <button id="btn-calc" onclick="genereaza()">Calculează Predicția</button>
+        </div>
 
         <div id="result-box">
-            <div class="res-line">Pariu Recomandat: <span id="pariu" class="highlight">--</span></div>
+            <div class="res-line">Pariu: <span id="pariu" class="highlight">--</span></div>
             <div class="res-line">Probabilitate: <span id="prob" class="highlight">0%</span></div>
-            <div class="res-line">Scor Probabil: <span id="scor">--</span></div>
+            <div class="res-line">Scor Probabil: <span id="scor" style="color: #fff; font-weight: bold;">--</span></div>
         </div>
     </div>
 
     <script>
+        // Baza de date extinsă cu ligi
+        const ligi = [
+            "România - Superliga", "România - Liga 2", "Anglia - Premier League", "Anglia - Championship",
+            "Spania - La Liga", "Spania - Segunda", "Germania - Bundesliga", "Germania - 2. Bundesliga",
+            "Italia - Serie A", "Italia - Serie B", "Franța - Ligue 1", "Franța - Ligue 2",
+            "Olanda - Eredivisie", "Portugalia - Liga Portugal", "Turcia - Super Lig", "Belgia - Pro League",
+            "Scoția - Premiership", "Grecia - Super League", "Austria - Bundesliga", "Elveția - Super League",
+            "Danemarca - Superliga", "Polonia - Ekstraklasa", "Cehia - Fortuna Liga", "Croația - HNL",
+            "Brazilia - Serie A", "Argentina - Liga Profesional", "USA - MLS", "Mexic - Liga MX",
+            "Japonia - J1 League", "Arabia Saudită - Pro League", "Champions League", "Europa League", "Conference League"
+        ];
+
+        // Populare automată datalist
+        const dl = document.getElementById('lista-ligi');
+        ligi.sort().forEach(l => {
+            let opt = document.createElement('option');
+            opt.value = l;
+            dl.appendChild(opt);
+        });
+
         function genereaza() {
+            const l = document.getElementById('liga').value;
             const h = document.getElementById('home').value;
             const a = document.getElementById('away').value;
-            if(!h || !a) return alert("Introdu ambele echipe!");
-
+            const btn = document.getElementById('btn-calc');
             const rb = document.getElementById('result-box');
-            rb.style.display = 'block';
 
-            const optiuni = ["GG (Ambele marchează)", "Peste 2.5 Goluri", "1 solist", "X2 (Egal sau Oaspeți)", "Sub 3.5 Goluri"];
-            const scoruri = ["1-1", "2-1", "1-0", "2-2", "0-1"];
-            
-            document.getElementById('pariu').innerText = optiuni[Math.floor(Math.random() * optiuni.length)];
-            document.getElementById('prob').innerText = (Math.floor(Math.random() * 20) + 70) + "%";
-            document.getElementById('scor').innerText = scoruri[Math.floor(Math.random() * scoruri.length)];
+            if(!l || !h || !a) {
+                alert("Te rugăm să completezi toate câmpurile!");
+                return;
+            }
+
+            // Efect de încărcare
+            btn.disabled = true;
+            btn.innerText = "Analiză date statistice...";
+            rb.style.display = 'none';
+
+            setTimeout(() => {
+                const optiuni = ["GG (Ambele marchează)", "Peste 2.5 Goluri", "1 Solist", "X2 (Egal sau Oaspeți)", "Sub 3.5 Goluri", "Peste 1.5 Goluri", "Peste 8.5 Cornere"];
+                const scoruri = ["1-1", "2-1", "1-0", "2-2", "0-1", "3-1", "1-2"];
+                
+                document.getElementById('pariu').innerText = optiuni[Math.floor(Math.random() * optiuni.length)];
+                document.getElementById('prob').innerText = (Math.floor(Math.random() * 21) + 72) + "%";
+                document.getElementById('scor').innerText = scoruri[Math.floor(Math.random() * scoruri.length)];
+                
+                rb.style.display = 'block';
+                btn.disabled = false;
+                btn.innerText = "Calculează Predicția";
+            }, 1200);
         }
     </script>
 </body>
