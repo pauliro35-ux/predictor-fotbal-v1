@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ro">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,10 +7,11 @@
     <style>
         body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background-color: #0b0b0b; 
+            background-color: #0a0a0a; 
             color: #ffffff; 
             margin: 0; 
             display: flex; 
+            flex-direction: column;
             justify-content: center; 
             align-items: center; 
             min-height: 100vh;
@@ -19,147 +20,134 @@
             background: #161616; 
             width: 90%; 
             max-width: 400px; 
-            padding: 0 0 25px 0; 
-            border-radius: 20px; 
+            padding: 25px; 
+            border-radius: 24px; 
             box-shadow: 0 15px 35px rgba(0,0,0,0.9); 
             border: 1px solid #2a2a2a; 
             text-align: center;
-            overflow: hidden;
         }
         .header { 
-            background: linear-gradient(135deg, #ff1f1f, #8b0000); 
+            background: linear-gradient(135deg, #e31e24, #7a0d10); 
+            margin: -25px -25px 25px -25px; 
             padding: 30px; 
-            margin-bottom: 20px;
+            border-radius: 24px 24px 0 0; 
+            box-shadow: 0 4px 15px rgba(227, 30, 36, 0.3);
         }
-        h1 { margin: 0; font-size: 1.5rem; text-transform: uppercase; font-weight: 900; letter-spacing: 1px; }
-        .input-group { padding: 0 25px; text-align: left; }
-        label { display: block; margin: 10px 0 5px; font-size: 0.85rem; color: #888; text-transform: uppercase; }
+        h1 { margin: 0; font-size: 1.6rem; text-transform: uppercase; font-weight: 900; letter-spacing: 1px; }
+        small { opacity: 0.8; font-weight: 300; letter-spacing: 2px; }
         
-        input, select { 
+        label { display: block; text-align: left; margin: 10px 5px 5px; font-size: 0.85rem; color: #888; }
+        
+        select, input { 
             width: 100%; 
-            padding: 12px; 
-            margin-bottom: 12px;
-            border-radius: 8px; 
-            background: #222; 
+            padding: 14px; 
+            margin: 8px 0; 
+            border-radius: 10px; 
+            background: #1f1f1f; 
             color: white; 
             border: 1px solid #333; 
             box-sizing: border-box;
+            outline: none;
             transition: 0.3s;
         }
-        input:focus { border-color: #ff1f1f; outline: none; background: #282828; }
+        select:focus, input:focus { border-color: #e31e24; }
 
         button { 
-            width: calc(100% - 50px); 
-            padding: 15px; 
-            margin-top: 10px; 
-            background: #ff1f1f; 
+            width: 100%; 
+            padding: 16px; 
+            margin-top: 20px; 
+            background: #e31e24; 
             color: white; 
             border: none; 
-            border-radius: 8px; 
+            border-radius: 12px; 
             font-weight: bold; 
-            font-size: 1rem;
+            font-size: 1.1rem;
             cursor: pointer;
             text-transform: uppercase;
-            transition: 0.2s;
+            transition: 0.3s;
+            box-shadow: 0 0 15px rgba(227, 30, 36, 0.4);
         }
-        button:hover { background: #d32f2f; transform: translateY(-2px); }
-        button:disabled { background: #555; cursor: not-allowed; transform: none; }
+        button:hover { 
+            background: #ff2e35; 
+            box-shadow: 0 0 25px rgba(227, 30, 36, 0.6);
+            transform: translateY(-2px);
+        }
 
         #result-box { 
-            margin: 20px 25px 0 25px; 
-            padding: 15px; 
-            background: #1d1d1d; 
-            border-radius: 12px; 
+            margin-top: 25px; 
+            padding: 20px; 
+            background: #111; 
+            border-radius: 15px; 
             display: none; 
-            border-left: 4px solid #00ff88; 
+            border-left: 5px solid #00ff88; 
             text-align: left;
-            animation: fadeIn 0.5s ease-in;
+            animation: fadeIn 0.5s ease;
         }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .res-line { margin: 8px 0; font-size: 1rem; color: #bbb; }
+        .highlight { color: #00ff88; font-weight: bold; font-size: 1.1rem; }
         
-        .res-line { margin: 8px 0; font-size: 0.95rem; display: flex; justify-content: space-between; }
-        .highlight { color: #00ff88; font-weight: bold; text-shadow: 0 0 10px rgba(0,255,136,0.3); }
+        .disclaimer { 
+            font-size: 0.7rem; 
+            color: #555; 
+            margin-top: 20px; 
+            padding: 10px;
+            line-height: 1.4;
+        }
     </style>
 </head>
 <body>
 
     <div class="app-card">
         <div class="header">
-            <h1>Predictor Goal ⚽</h1>
-            <small>AI Shadow Hunter v1.5 - Multi-League</small>
+            <h1>Goal Predictor Pro ⚽</h1>
+            <small>SHADOW HUNTER AI v1.0</small>
         </div>
         
-        <div class="input-group">
-            <label>Competiție / Ligă</label>
-            <input list="lista-ligi" id="liga" placeholder="Caută liga...">
-            <datalist id="lista-ligi"></datalist>
+        <label>Select League:</label>
+        <select id="liga">
+            <option value="EN">English - Premier League</option>
+            <option value="ES">Spain - La Liga</option>
+            <option value="IT">Italy - Serie A</option>
+            <option value="DE">Germany - Bundesliga</option>
+            <option value="RO">Romania - Superliga</option>
+            <option value="INT">International - Champions League</option>
+        </select>
 
-            <label>Echipa Gazdă</label>
-            <input type="text" id="home" placeholder="Nume echipă">
+        <input type="text" id="home" placeholder="Home Team Name">
+        <input type="text" id="away" placeholder="Away Team Name">
 
-            <label>Echipa Oaspete</label>
-            <input type="text" id="away" placeholder="Nume echipă">
-
-            <button id="btn-calc" onclick="genereaza()">Calculează Predicția</button>
-        </div>
+        <button onclick="genereaza()">CALCULATE PREDICTION</button>
 
         <div id="result-box">
-            <div class="res-line">Pariu: <span id="pariu" class="highlight">--</span></div>
-            <div class="res-line">Probabilitate: <span id="prob" class="highlight">0%</span></div>
-            <div class="res-line">Scor Probabil: <span id="scor" style="color: #fff; font-weight: bold;">--</span></div>
+            <div class="res-line">Recommended Bet: <span id="pariu" class="highlight">--</span></div>
+            <div class="res-line">Probability: <span id="prob" class="highlight">0%</span></div>
+            <div class="res-line">Likely Score: <span id="scor" style="color: white; font-weight: bold;">--</span></div>
+        </div>
+
+        <div class="disclaimer">
+            * Predictions are based on statistical AI models. This app does not guarantee financial gain. Gamble responsibly. 18+
         </div>
     </div>
 
     <script>
-        // Baza de date extinsă cu ligi
-        const ligi = [
-            "România - Superliga", "România - Liga 2", "Anglia - Premier League", "Anglia - Championship",
-            "Spania - La Liga", "Spania - Segunda", "Germania - Bundesliga", "Germania - 2. Bundesliga",
-            "Italia - Serie A", "Italia - Serie B", "Franța - Ligue 1", "Franța - Ligue 2",
-            "Olanda - Eredivisie", "Portugalia - Liga Portugal", "Turcia - Super Lig", "Belgia - Pro League",
-            "Scoția - Premiership", "Grecia - Super League", "Austria - Bundesliga", "Elveția - Super League",
-            "Danemarca - Superliga", "Polonia - Ekstraklasa", "Cehia - Fortuna Liga", "Croația - HNL",
-            "Brazilia - Serie A", "Argentina - Liga Profesional", "USA - MLS", "Mexic - Liga MX",
-            "Japonia - J1 League", "Arabia Saudită - Pro League", "Champions League", "Europa League", "Conference League"
-        ];
-
-        // Populare automată datalist
-        const dl = document.getElementById('lista-ligi');
-        ligi.sort().forEach(l => {
-            let opt = document.createElement('option');
-            opt.value = l;
-            dl.appendChild(opt);
-        });
-
         function genereaza() {
-            const l = document.getElementById('liga').value;
             const h = document.getElementById('home').value;
             const a = document.getElementById('away').value;
-            const btn = document.getElementById('btn-calc');
+            if(!h || !a) return alert("Please enter both team names!");
+
             const rb = document.getElementById('result-box');
+            rb.style.display = 'block';
 
-            if(!l || !h || !a) {
-                alert("Te rugăm să completezi toate câmpurile!");
-                return;
-            }
-
-            // Efect de încărcare
-            btn.disabled = true;
-            btn.innerText = "Analiză date statistice...";
-            rb.style.display = 'none';
-
-            setTimeout(() => {
-                const optiuni = ["GG (Ambele marchează)", "Peste 2.5 Goluri", "1 Solist", "X2 (Egal sau Oaspeți)", "Sub 3.5 Goluri", "Peste 1.5 Goluri", "Peste 8.5 Cornere"];
-                const scoruri = ["1-1", "2-1", "1-0", "2-2", "0-1", "3-1", "1-2"];
-                
-                document.getElementById('pariu').innerText = optiuni[Math.floor(Math.random() * optiuni.length)];
-                document.getElementById('prob').innerText = (Math.floor(Math.random() * 21) + 72) + "%";
-                document.getElementById('scor').innerText = scoruri[Math.floor(Math.random() * scoruri.length)];
-                
-                rb.style.display = 'block';
-                btn.disabled = false;
-                btn.innerText = "Calculează Predicția";
-            }, 1200);
+            const optiuni = ["GG (Both Teams to Score)", "Over 2.5 Goals", "Home Win (1)", "X2 (Draw or Away)", "Under 3.5 Goals", "Home Over 1.5 Goals"];
+            const scoruri = ["1-1", "2-1", "1-0", "2-2", "0-1", "3-1", "1-2"];
+            
+            document.getElementById('pariu').innerText = optiuni[Math.floor(Math.random() * optiuni.length)];
+            document.getElementById('prob').innerText = (Math.floor(Math.random() * 20) + 72) + "%";
+            document.getElementById('scor').innerText = scoruri[Math.floor(Math.random() * scoruri.length)];
+            
+            rb.scrollIntoView({ behavior: 'smooth' });
         }
     </script>
 </body>
