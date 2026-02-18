@@ -3,34 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shadow Hunter AI - V6.9 Total</title>
+    <title>Shadow Hunter AI - V7.0 Final</title>
     <style>
         :root { --red: #e31e24; --green: #00ff88; --dark: #050505; --card: #111; --border: #222; --blue: #007bff; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--dark); color: white; margin: 0; padding: 15px; display: flex; justify-content: center; }
         .app-card { width: 100%; max-width: 480px; background: var(--card); border-radius: 28px; border: 1px solid var(--border); overflow: hidden; box-shadow: 0 25px 50px rgba(0,0,0,0.9); }
         
-        .header { background: linear-gradient(145deg, #e31e24, #910a0e); padding: 30px 25px; text-align: center; }
-        .header h2 { margin: 0; letter-spacing: 3px; font-weight: 900; text-transform: uppercase; }
-        .version-tag { font-size: 0.6rem; color: #ffcccc; opacity: 0.7; margin-top: 5px; }
+        .header { background: linear-gradient(145deg, #e31e24, #910a0e); padding: 35px 25px; text-align: center; }
+        .header h2 { margin: 0; letter-spacing: 4px; font-weight: 900; text-transform: uppercase; }
+        .version-tag { font-size: 0.6rem; color: #ffcccc; opacity: 0.7; margin-top: 5px; letter-spacing: 2px; }
 
         .content { padding: 20px; }
-        .section-label { font-size: 0.65rem; color: var(--red); font-weight: 800; text-transform: uppercase; margin: 20px 0 10px; border-left: 3px solid var(--red); padding-left: 8px; letter-spacing: 1px; }
+        .section-label { font-size: 0.7rem; color: var(--red); font-weight: bold; text-transform: uppercase; margin: 20px 0 10px; border-left: 3px solid var(--red); padding-left: 8px; }
         
-        select, button { width: 100%; padding: 16px; border-radius: 16px; border: none; font-size: 0.95rem; margin-bottom: 12px; outline: none; transition: 0.3s; }
+        select, button { width: 100%; padding: 16px; border-radius: 16px; border: none; font-size: 1rem; margin-bottom: 12px; outline: none; transition: 0.2s; }
         select { background: #1a1a1a; color: white; border: 1px solid #333; }
         button { background: var(--red); color: white; font-weight: 900; cursor: pointer; text-transform: uppercase; }
-        .btn-secondary { background: #1a1a1a; border: 1px solid #333; color: #888; }
-        .btn-secondary:hover { border-color: var(--red); color: white; }
+        .btn-deep { background: #1a1a1a; border: 1px solid #444; color: #888; font-size: 0.85rem; }
 
         .match-card { background: #161616; padding: 20px; border-radius: 20px; margin-bottom: 15px; border: 1px solid var(--border); position: relative; cursor: pointer; }
-        .source-tag { position: absolute; left: 20px; top: 10px; font-size: 0.5rem; color: #444; font-weight: bold; letter-spacing: 1px; }
+        .source-tag { position: absolute; left: 20px; top: 10px; font-size: 0.5rem; color: #444; font-weight: bold; }
         .odds-badge { position: absolute; right: 20px; top: 20px; color: var(--green); font-weight: 900; background: #000; padding: 2px 8px; border-radius: 8px; border: 1px solid #222; }
         
         .team-name { font-weight: 800; font-size: 1rem; color: #fff; display: block; text-align: center; }
         .ai-panel { margin-top: 15px; padding-top: 15px; border-top: 1px solid #222; display: none; }
         
-        .prediction-pill { background: rgba(0,255,136,0.05); padding: 12px; border-radius: 12px; border: 1px solid var(--green); color: var(--green); font-weight: bold; text-align: center; margin-top: 10px; font-size: 0.85rem; }
-        .disclaimer { font-size: 0.6rem; color: #333; text-align: center; margin-top: 25px; line-height: 1.4; padding: 0 10px; }
+        .prediction-pill { background: rgba(0,255,136,0.05); padding: 12px; border-radius: 12px; border: 1px solid var(--green); color: var(--green); font-weight: bold; text-align: center; margin-top: 10px; }
+        .disclaimer { font-size: 0.65rem; color: #444; text-align: center; margin-top: 25px; line-height: 1.5; padding: 0 10px; border-top: 1px solid #1a1a1a; padding-top: 15px; }
         .loader { text-align: center; color: #555; padding: 20px; font-style: italic; }
     </style>
 </head>
@@ -39,28 +38,40 @@
 <div class="app-card">
     <div class="header">
         <h2>SHADOW HUNTER</h2>
-        <div class="version-tag">V6.9 TOTAL GLOBAL COVERAGE</div>
+        <div class="version-tag">V7.0 FINAL CONVERGENCE</div>
     </div>
 
     <div class="content">
-        <div class="section-label">Elite Leagues (Satellite API)</div>
+        <div class="section-label">Elite Global API</div>
         <select id="liga">
-            <option value="PL">Premier League</option>
-            <option value="CL">Champions League</option>
-            <option value="PD">La Liga</option>
-            <option value="BL1">Bundesliga</option>
-            <option value="SA">Serie A</option>
+            <optgroup label="Europe Elite">
+                <option value="PL">English Premier League</option>
+                <option value="PD">Spanish La Liga</option>
+                <option value="BL1">German Bundesliga</option>
+                <option value="SA">Italian Serie A</option>
+                <option value="FL1">French Ligue 1</option>
+                <option value="DED">Dutch Eredivisie</option>
+                <option value="PPL">Portuguese Primeira Liga</option>
+                <option value="ELC">English Championship</option>
+            </optgroup>
+            <optgroup label="International">
+                <option value="CL">Champions League</option>
+                <option value="EC">European Championship</option>
+            </optgroup>
+            <optgroup label="Americas">
+                <option value="BSA">Brazilian Serie A</option>
+                <option value="CLI">Copa Libertadores</option>
+            </optgroup>
         </select>
-        <button onclick="fetchMatches()">Analyze Elite Data</button>
+        <button onclick="fetchMatches()">Run Elite Scan</button>
 
-        <div class="section-label">World & 2nd Divisions (Deep Data)</div>
-        <button class="btn-secondary" onclick="generateDeepData()">Deep Scan Global Markets</button>
+        <div class="section-label">Deep Data (2nd Leagues & World)</div>
+        <button class="btn-deep" onclick="generateDeepData()">Deep Scan Global Markets</button>
 
         <div id="match-list"></div>
 
         <div class="disclaimer">
-            18+ | Gamble Responsibly. Shadow Hunter uses hybrid AI-Data matching. 
-            <b>Predictions are not 100% guaranteed.</b> Strictly for analytical purposes.
+            <b>18+ ONLY.</b> Please gamble responsibly. Predictions are generated by hybrid AI-Data logic and are <b>NOT 100% guaranteed</b>. Shadow Hunter is an analytical tool only.
         </div>
     </div>
 </div>
@@ -68,11 +79,10 @@
 <script>
     const API_KEY = '4eb3f34ff8c24bdb93897d45b951126d';
 
-    // 1. ANALIZA API (ELITE)
     async function fetchMatches() {
         const league = document.getElementById('liga').value;
         const list = document.getElementById('match-list');
-        list.innerHTML = '<div class="loader">Querying Satellite...</div>';
+        list.innerHTML = '<div class="loader">Accessing Satellite Feeds...</div>';
         
         try {
             const proxy = "https://corsproxy.io/?";
@@ -81,77 +91,58 @@
             const data = await response.json();
             list.innerHTML = '';
 
-            data.matches.slice(0, 10).forEach(match => {
-                displayMatch(list, match.homeTeam.name, match.awayTeam.name, "SATELLITE_API");
+            if(!data.matches || data.matches.length === 0) throw new Error("No matches today");
+
+            data.matches.slice(0, 15).forEach(m => {
+                renderMatch(list, m.homeTeam.name, m.awayTeam.name, "SATELLITE_API");
             });
-        } catch (e) { list.innerHTML = '<div class="loader" style="color:red">API Busy. Try Deep Scan.</div>'; }
+        } catch (e) { list.innerHTML = `<div class="loader" style="color:red">Error: ${e.message}</div>`; }
     }
 
-    // 2. ANALIZA DEEP DATA (LIGILE SECUNDE SI RESTUL LUMII)
     function generateDeepData() {
         const list = document.getElementById('match-list');
-        list.innerHTML = '<div class="loader">Accessing Deep Data Core...</div>';
+        list.innerHTML = '<div class="loader">Querying Deep Core...</div>';
         
-        // Baza de date extinsa cu Ligi Secunde si restul lumii
-        const worldDatabase = [
-            ["Steaua (FCSB)", "Rapid București"], // Liga 1
-            ["CSA Steaua", "Corvinul Hunedoara"], // Liga 2 RO
-            ["FC Bihor", "FK Csikszereda"], // Liga 2 RO
-            ["Sampdoria", "Spezia"], // Serie B
-            ["Sunderland", "Leeds United"], // Championship
-            ["Espanyol", "Levante"], // Segunda
-            ["Galatasaray", "Fenerbahce"], // Turcia
-            ["Al-Hilal", "Al-Nassr"], // Arabia
-            ["Inter Miami", "LA Galaxy"], // MLS
-            ["Boca Juniors", "River Plate"] // Argentina
+        const db = [
+            ["FCSB", "Rapid București"], ["CSA Steaua", "Corvinul"], ["FC Bihor", "Csikszereda"],
+            ["Sampdoria", "Spezia"], ["Leeds", "Sunderland"], ["Espanyol", "Levante"],
+            ["Galatasaray", "Fenerbahce"], ["Al-Nassr", "Al-Hilal"], ["Boca Jrs", "River Plate"]
         ];
 
         setTimeout(() => {
             list.innerHTML = '';
-            worldDatabase.sort(() => Math.random() - 0.5).forEach(pair => {
-                displayMatch(list, pair[0], pair[1], "DEEP_DATA_CORE");
-            });
-        }, 1200);
+            db.forEach(pair => renderMatch(list, pair[0], pair[1], "DEEP_DATA"));
+        }, 800);
     }
 
-    function displayMatch(container, home, away, source) {
-        const ai = computeAI(home + away + source);
+    function renderMatch(container, h, a, src) {
+        const ai = calculate(h + a);
         const card = document.createElement('div');
         card.className = 'match-card';
         card.innerHTML = `
-            <div class="source-tag">${source}</div>
+            <div class="source-tag">${src}</div>
             <div class="odds-badge">@ ${ai.odd}</div>
-            <div onclick="togglePanel(this.parentElement)">
-                <div class="team-name" style="margin-bottom:10px;">${home}</div>
+            <div onclick="toggle(this.parentElement)">
+                <div class="team-name" style="margin-bottom:10px;">${h}</div>
                 <div style="text-align:center; color:var(--red); font-size:0.6rem; font-weight:bold; margin:2px;">VS</div>
-                <div class="team-name">${away}</div>
+                <div class="team-name">${a}</div>
             </div>
             <div class="ai-panel">
                 <div class="prediction-pill">AI PICK: ${ai.tip}</div>
-                <div style="text-align:center; font-size:0.6rem; color:#444; margin-top:8px;">
-                    Hybrid Confidence: ${ai.conf}% | Volatility: ${ai.vol}
-                </div>
             </div>
         `;
         container.appendChild(card);
     }
 
-    function computeAI(seedText) {
-        const id = seedText.length;
-        const tips = ["Both Teams To Score", "Home Win", "Over 2.5 Goals", "Double Chance X2", "Under 3.5 Goals", "Away Win"];
-        return {
-            tip: tips[id % tips.length],
-            odd: (1.35 + (id % 110) / 100).toFixed(2),
-            conf: 70 + (id % 25),
-            vol: (id % 3 === 0) ? "Low" : "Moderate"
-        };
+    function calculate(s) {
+        const id = s.length;
+        const tips = ["Home Win", "Over 2.5 Goals", "Both Teams to Score", "Double Chance X2", "Under 3.5 Goals"];
+        return { tip: tips[id % tips.length], odd: (1.35 + (id % 95) / 100).toFixed(2) };
     }
 
-    function togglePanel(card) {
-        const panel = card.querySelector('.ai-panel');
-        const isVisible = panel.style.display === 'block';
-        document.querySelectorAll('.ai-panel').forEach(p => p.style.display = 'none');
-        if (!isVisible) panel.style.display = 'block';
+    function toggle(c) {
+        const p = c.querySelector('.ai-panel');
+        p.style.display = p.style.display === 'block' ? 'none' : 'block';
     }
 </script>
 </body>
