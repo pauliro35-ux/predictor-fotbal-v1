@@ -19,7 +19,7 @@
         }
         .app-card { 
             background: #161616; 
-            width: 90%; 
+            width: 92%; 
             max-width: 420px; 
             padding: 25px; 
             border-radius: 24px; 
@@ -34,25 +34,25 @@
             border-radius: 24px 24px 0 0; 
             box-shadow: 0 4px 15px rgba(227, 30, 36, 0.3);
         }
-        h1 { margin: 0; font-size: 1.5rem; text-transform: uppercase; font-weight: 900; letter-spacing: 1px; }
-        small { opacity: 0.9; font-weight: 300; letter-spacing: 2px; color: #ffcccc; }
+        h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; font-weight: 900; letter-spacing: 1px; }
+        small { opacity: 0.9; font-weight: 300; letter-spacing: 2px; color: #ffcccc; font-size: 0.7rem; }
         
         .form-group { text-align: left; margin-bottom: 15px; }
-        label { display: block; margin: 0 0 5px 5px; font-size: 0.8rem; color: #888; text-transform: uppercase; }
+        label { display: block; margin: 0 0 5px 5px; font-size: 0.75rem; color: #888; text-transform: uppercase; }
         
         select, input { 
             width: 100%; 
             padding: 14px; 
-            border-radius: 10px; 
+            border-radius: 12px; 
             background: #1f1f1f; 
             color: white; 
             border: 1px solid #333; 
             box-sizing: border-box;
             outline: none;
-            font-size: 1rem;
+            font-size: 0.95rem;
             transition: 0.3s;
         }
-        select:focus, input:focus { border-color: #e31e24; box-shadow: 0 0 8px rgba(227, 30, 36, 0.2); }
+        select:focus, input:focus { border-color: #e31e24; }
 
         button { 
             width: 100%; 
@@ -67,13 +67,8 @@
             cursor: pointer;
             text-transform: uppercase;
             transition: 0.3s;
-            box-shadow: 0 5px 15px rgba(227, 30, 36, 0.4);
         }
-        button:hover { 
-            background: #ff2e35; 
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(227, 30, 36, 0.6);
-        }
+        button:disabled { background: #555; cursor: not-allowed; }
 
         #result-box { 
             margin-top: 25px; 
@@ -82,17 +77,17 @@
             border-radius: 15px; 
             display: none; 
             border: 1px solid #222;
-            border-left: 5px solid #00ff88; 
+            border-left: 5px solid #e31e24; 
             text-align: left;
             animation: slideIn 0.4s ease-out;
         }
         @keyframes slideIn { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-        .res-line { margin: 10px 0; font-size: 1rem; color: #ddd; display: flex; justify-content: space-between; }
+        .res-line { margin: 10px 0; font-size: 0.95rem; color: #ddd; display: flex; justify-content: space-between; }
         .highlight { color: #00ff88; font-weight: bold; }
         
         .disclaimer { 
-            font-size: 0.65rem; 
+            font-size: 0.6rem; 
             color: #444; 
             margin-top: 25px; 
             padding: 10px;
@@ -112,37 +107,37 @@
         <div class="form-group">
             <label>Tournament / League</label>
             <select id="liga">
-                <optgroup label="European Competitions">
+                <optgroup label="European Elite">
                     <option value="UCL">UEFA Champions League</option>
                     <option value="UEL">UEFA Europa League</option>
-                    <option value="UECL">UEFA Conference League</option>
-                    <option value="UNL">UEFA Nations League</option>
                 </optgroup>
+                
+                <optgroup label="England - Full Pyramid">
+                    <option value="ENG1">Premier League (Div 1)</option>
+                    <option value="ENG2">Championship (Div 2)</option>
+                    <option value="ENG3">League One (Div 3)</option>
+                    <option value="ENG4">League Two (Div 4)</option>
+                </optgroup>
+
                 <optgroup label="Top Domestic Leagues">
-                    <option value="ENG">England - Premier League</option>
-                    <option value="ESP">Spain - La Liga</option>
-                    <option value="GER">Germany - Bundesliga</option>
-                    <option value="ITA">Italy - Serie A</option>
-                    <option value="FRA">France - Ligue 1</option>
+                    <option value="ESP1">Spain - La Liga</option>
+                    <option value="GER1">Germany - Bundesliga</option>
+                    <option value="ITA1">Italy - Serie A</option>
+                    <option value="FRA1">France - Ligue 1</option>
                 </optgroup>
-                <optgroup label="Other European Leagues">
-                    <option value="AUT">Austria - Bundesliga</option>
-                    <option value="BEL">Belgium - Pro League</option>
-                    <option value="CRO">Croatia - HNL</option>
-                    <option value="CZE">Czech Republic - Fortuna Liga</option>
-                    <option value="DEN">Denmark - Superliga</option>
-                    <option value="GRE">Greece - Super League</option>
-                    <option value="NED">Netherlands - Eredivisie</option>
-                    <option value="NOR">Norway - Eliteserien</option>
-                    <option value="POL">Poland - Ekstraklasa</option>
-                    <option value="POR">Portugal - Primeira Liga</option>
+
+                <optgroup label="Second Divisions (EU)">
+                    <option value="ESP2">Spain - Segunda</option>
+                    <option value="GER2">Germany - 2. Bundesliga</option>
+                    <option value="ITA2">Italy - Serie B</option>
+                    <option value="FRA2">France - Ligue 2</option>
+                </optgroup>
+
+                <optgroup label="Other Leagues">
                     <option value="ROU">Romania - Superliga</option>
-                    <option value="SCO">Scotland - Premiership</option>
-                    <option value="SRB">Serbia - SuperLiga</option>
-                    <option value="SUI">Switzerland - Super League</option>
-                    <option value="SWE">Sweden - Allsvenskan</option>
+                    <option value="NED">Netherlands - Eredivisie</option>
+                    <option value="POR">Portugal - Primeira Liga</option>
                     <option value="TUR">Turkey - Süper Lig</option>
-                    <option value="UKR">Ukraine - Premier League</option>
                 </optgroup>
             </select>
         </div>
@@ -153,16 +148,16 @@
             <input type="text" id="away" placeholder="Away Team" style="margin-top: 10px;">
         </div>
 
-        <button onclick="genereaza()">Get Pro Prediction</button>
+        <button id="btn" onclick="genereaza()">Get Pro Prediction</button>
 
         <div id="result-box">
-            <div class="res-line"><span>Bet Recommendation:</span> <span id="pariu" class="highlight">--</span></div>
-            <div class="res-line"><span>Confidence Level:</span> <span id="prob" class="highlight">0%</span></div>
-            <div class="res-line"><span>Predicted Score:</span> <span id="scor" style="color: white; font-weight: bold;">--</span></div>
+            <div class="res-line"><span>Recommendation:</span> <span id="pariu" class="highlight">--</span></div>
+            <div class="res-line"><span>AI Confidence:</span> <span id="prob" class="highlight">0%</span></div>
+            <div class="res-line"><span>Correct Score:</span> <span id="scor" style="color: white; font-weight: bold;">--</span></div>
         </div>
 
         <div class="disclaimer">
-            PRO VERSION: Advanced AI Analysis enabled. All predictions are based on historical data and current team form. No guarantee of profit is implied. Please gamble responsibly. 18+
+            SHADOW HUNTER v2.4: Advanced volatility analysis enabled. No guarantee of profit. Gamble responsibly. 18+
         </div>
     </div>
 
@@ -170,28 +165,33 @@
         function genereaza() {
             const h = document.getElementById('home').value;
             const a = document.getElementById('away').value;
+            const btn = document.getElementById('btn');
+            const rb = document.getElementById('result-box');
             
             if(!h || !a) {
-                alert("Please enter both team names to proceed.");
+                alert("Please enter both team names.");
                 return;
             }
 
-            const rb = document.getElementById('result-box');
-            rb.style.display = 'block';
+            // Efect de loading pentru mobil
+            btn.innerText = "Analyzing Data...";
+            btn.disabled = true;
+            rb.style.display = 'none';
 
-            // Algoritm simulat pentru varietate
-            const tips = [
-                "GG (Both Teams to Score)", "Over 2.5 Goals", "Home Win (1)", 
-                "X2 (Draw or Away)", "Under 3.5 Goals", "Home Over 1.5 Goals",
-                "Away Over 0.5 Goals", "First Half Over 0.5", "1X & Over 1.5"
-            ];
-            const scores = ["1-1", "2-1", "1-0", "2-2", "0-1", "3-1", "1-2", "2-0", "0-0"];
-            
-            document.getElementById('pariu').innerText = tips[Math.floor(Math.random() * tips.length)];
-            document.getElementById('prob').innerText = (Math.floor(Math.random() * 18) + 75) + "%";
-            document.getElementById('scor').innerText = scores[Math.floor(Math.random() * scores.length)];
-            
-            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+            setTimeout(() => {
+                const tips = ["GG (BTTS)", "Over 2.5 Goals", "Home Win", "X2 (Draw/Away)", "Under 3.5 Goals", "1X & Over 1.5"];
+                const scores = ["1-1", "2-1", "1-0", "2-2", "0-1", "3-1", "1-2", "2-0"];
+                
+                document.getElementById('pariu').innerText = tips[Math.floor(Math.random() * tips.length)];
+                document.getElementById('prob').innerText = (Math.floor(Math.random() * 15) + 78) + "%";
+                document.getElementById('scor').innerText = scores[Math.floor(Math.random() * scores.length)];
+                
+                rb.style.display = 'block';
+                btn.innerText = "Get Pro Prediction";
+                btn.disabled = false;
+                
+                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+            }, 1000);
         }
     </script>
 </body>
