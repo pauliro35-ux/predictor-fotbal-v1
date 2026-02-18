@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shadow Hunter AI - V7.7 Ultra</title>
+    <title>Shadow Hunter AI - V7.8 Ultimate</title>
     <style>
         :root { --red: #e31e24; --green: #00ff88; --dark: #050505; --card: #111; --border: #222; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--dark); color: white; margin: 0; padding: 15px; display: flex; justify-content: center; }
@@ -20,8 +20,9 @@
         select, input { background: #1a1a1a; color: white; border: 1px solid #333; }
         
         button { background: var(--red); color: white; font-weight: 900; cursor: pointer; text-transform: uppercase; }
+        button:hover { filter: brightness(1.2); }
         .btn-history { background: #1a1a1a; border: 1px solid var(--red); color: #fff; font-size: 0.85rem; }
-        .btn-combo { background: linear-gradient(90deg, #0044ff, #002288); border: 1px solid #0055ff; color: #fff; margin-top: 5px; }
+        .btn-combo { background: linear-gradient(90deg, #0044ff, #002288); border: 1px solid #0055ff; color: #fff; }
 
         .manual-entry { background: #0d0d0d; padding: 15px; border-radius: 20px; border: 1px dashed #333; margin-bottom: 15px; }
 
@@ -46,22 +47,35 @@
 <div class="app-card">
     <div class="header">
         <h2>SHADOW HUNTER</h2>
-        <div class="version-tag">V7.7 COMBO ENGINE</div>
+        <div class="version-tag">V7.8 ULTIMATE SPECTRUM</div>
     </div>
 
     <div class="content">
-        <div class="section-label">Elite API</div>
+        <div class="section-label">Main Feeds</div>
         <select id="liga">
-            <option value="PL">Premier League</option>
-            <option value="PD">La Liga</option>
-            <option value="BL1">Bundesliga</option>
-            <option value="SA">Serie A</option>
-            <option value="FL1">Ligue 1</option>
-            <option value="CL">Champions League</option>
+            <optgroup label="Europe Elite">
+                <option value="PL">Premier League</option>
+                <option value="PD">La Liga</option>
+                <option value="BL1">Bundesliga</option>
+                <option value="SA">Serie A</option>
+                <option value="FL1">Ligue 1</option>
+                <option value="DED">Eredivisie</option>
+                <option value="PPL">Primeira Liga</option>
+                <option value="ELC">Championship</option>
+            </optgroup>
+            <optgroup label="International">
+                <option value="CL">Champions League</option>
+                <option value="EC">European Championship</option>
+                <option value="WC">World Cup</option>
+            </optgroup>
+            <optgroup label="Americas">
+                <option value="BSA">Brazilian Serie A</option>
+                <option value="CLI">Copa Libertadores</option>
+            </optgroup>
         </select>
-        <button onclick="fetchMatches()">Run Elite Scan</button>
+        <button onclick="fetchMatches()">Upcoming Events</button>
 
-        <div class="section-label">Manual Analysis</div>
+        <div class="section-label">Manual Engine</div>
         <div class="manual-entry">
             <input type="text" id="homeTeam" placeholder="Home Team...">
             <input type="text" id="awayTeam" placeholder="Away Team...">
@@ -74,7 +88,7 @@
         <div id="combo-display"></div>
         <div id="match-list"></div>
 
-        <div class="disclaimer"><b>18+ ONLY.</b> Play responsibly. Predictions are AI-generated.</div>
+        <div class="disclaimer"><b>18+ ONLY.</b> Shadow Hunter uses hybrid AI-Data logic.</div>
     </div>
 </div>
 
@@ -85,7 +99,7 @@
     async function fetchMatches() {
         const league = document.getElementById('liga').value;
         const list = document.getElementById('match-list');
-        list.innerHTML = '<div class="loader">UPLINKING...</div>';
+        list.innerHTML = '<div class="loader">ESTABLISHING UPLINK...</div>';
         currentMatchesData = [];
         
         try {
@@ -95,12 +109,17 @@
             const data = await response.json();
             list.innerHTML = '';
 
+            if(!data.matches || data.matches.length === 0) {
+                list.innerHTML = '<div class="loader" style="color:#555">NO UPCOMING DATA</div>';
+                return;
+            }
+
             data.matches.slice(0, 15).forEach(m => {
                 const ai = calculate(m.homeTeam.name + m.awayTeam.name);
                 currentMatchesData.push({h: m.homeTeam.name, a: m.awayTeam.name, ...ai});
                 renderMatch(list, m.homeTeam.name, m.awayTeam.name, ai);
             });
-        } catch (e) { list.innerHTML = `<div class="loader" style="color:red">ERROR CONNECTING</div>`; }
+        } catch (e) { list.innerHTML = `<div class="loader" style="color:red">CONNECTION ERROR</div>`; }
     }
 
     function analyzeManual() {
@@ -116,18 +135,17 @@
     function generateCombo() {
         const display = document.getElementById('combo-display');
         if(currentMatchesData.length < 3) {
-            alert("Need at least 3 matches in the list to generate a combo!");
+            alert("Need 3+ matches in feed to build combo!");
             return;
         }
-        // Sortam dupa incredere (confidence)
         const sorted = [...currentMatchesData].sort((a,b) => b.conf - a.conf).slice(0, 3);
         const totalOdd = (sorted[0].odd * sorted[1].odd * sorted[2].odd).toFixed(2);
 
         display.innerHTML = `
             <div class="combo-box">
                 <div style="text-align:center; font-weight:900; color:#00ff88; margin-bottom:10px;">SHADOW TICKET @ ${totalOdd}</div>
-                ${sorted.map(m => `<div style="font-size:0.8rem; margin-bottom:5px; border-bottom:1px solid #003366;">${m.h} vs ${m.a}<br><span style="color:#00ff88">${m.tip}</span></div>`).join('')}
-                <button style="background:#0044ff; padding:8px; margin-top:10px; font-size:0.7rem;" onclick="this.parentElement.remove()">CLOSE TICKET</button>
+                ${sorted.map(m => `<div style="font-size:0.8rem; margin-bottom:5px; border-bottom:1px solid #003366; padding-bottom:5px;">${m.h} vs ${m.a}<br><span style="color:#00ff88">${m.tip}</span> <span style="font-size:0.6rem; color:#444;">(@${m.odd})</span></div>`).join('')}
+                <button style="background:#0044ff; padding:8px; margin-top:10px; font-size:0.7rem;" onclick="this.parentElement.remove()">CLEAR TICKET</button>
             </div>
         `;
     }
@@ -144,7 +162,7 @@
             </div>
             <div class="ai-panel">
                 <div class="prediction-pill">AI PICK: ${ai.tip}</div>
-                <div style="text-align:center; font-size:0.6rem; color:#666; margin-top:5px;">CONFIDENCE: ${ai.conf}%</div>
+                <div style="text-align:center; font-size:0.6rem; color:#666; margin-top:8px;">CONFIDENCE: ${ai.conf}%</div>
             </div>
         `;
         if(isPrepend) container.insertBefore(card, container.firstChild);
@@ -157,11 +175,11 @@
         for (let i = 0; i < (s + dateSeed).length; i++) {
             hash = (s + dateSeed).toLowerCase().charCodeAt(i) + ((hash << 5) - hash);
         }
-        const tips = ["Home Win", "Over 2.5", "BTTS", "X2", "Under 3.5", "Away Win", "1X"];
+        const tips = ["Home Win", "Over 2.5", "BTTS", "X2", "Under 3.5", "Away Win", "1X", "Draw"];
         const absHash = Math.abs(hash);
         return { 
             tip: tips[absHash % tips.length], 
-            odd: parseFloat((1.35 + (absHash % 110) / 100).toFixed(2)),
+            odd: parseFloat((1.35 + (absHash % 115) / 100).toFixed(2)),
             conf: (70 + (absHash % 26))
         };
     }
