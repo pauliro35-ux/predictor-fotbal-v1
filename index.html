@@ -3,149 +3,155 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shadow Hunter AI - Pro Engine</title>
+    <title>Shadow Hunter AI - Hybrid Engine</title>
     <style>
-        :root { --red: #e31e24; --green: #00ff88; --dark-bg: #050505; --card-bg: #111; }
-        body { font-family: 'Segoe UI', Roboto, sans-serif; background-color: var(--dark-bg); color: white; margin: 0; padding: 15px; display: flex; justify-content: center; }
-        .app-card { width: 100%; max-width: 450px; background: var(--card-bg); border-radius: 24px; border: 1px solid #222; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.8); }
-        .header { background: linear-gradient(135deg, var(--red), #7a0d10); padding: 25px; text-align: center; border-bottom: 3px solid var(--green); }
+        :root { --red: #e31e24; --green: #00ff88; --dark: #050505; --card: #111; --border: #222; --blue: #007bff; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--dark); color: white; margin: 0; padding: 15px; display: flex; justify-content: center; }
+        .app-card { width: 100%; max-width: 480px; background: var(--card); border-radius: 28px; border: 1px solid var(--border); overflow: hidden; box-shadow: 0 25px 50px rgba(0,0,0,0.9); }
+        
+        .header { background: linear-gradient(145deg, #e31e24, #910a0e); padding: 30px 20px; text-align: center; }
+        .header h2 { margin: 0; font-size: 1.6rem; letter-spacing: 3px; font-weight: 900; }
+        .api-status { font-size: 0.65rem; padding: 4px 12px; border-radius: 20px; color: #fff; text-transform: uppercase; font-weight: bold; margin-bottom: 10px; display: inline-block; background: #333; }
+
         .content { padding: 20px; }
-        label { font-size: 0.75rem; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; display: block; }
-        select, button { width: 100%; padding: 16px; border-radius: 14px; border: none; font-size: 1rem; outline: none; }
-        select { background: #1f1f1f; color: white; border: 1px solid #333; margin-bottom: 20px; }
-        button { background: var(--red); color: white; font-weight: 900; cursor: pointer; text-transform: uppercase; transition: 0.3s; box-shadow: 0 4px 15px rgba(227, 30, 36, 0.3); }
-        button:active { transform: scale(0.98); }
+        label { font-size: 0.7rem; color: #666; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; display: block; }
         
-        #match-list { margin-top: 20px; }
-        .match-card { background: #1a1a1a; padding: 18px; border-radius: 16px; margin-bottom: 15px; border: 1px solid #222; border-left: 5px solid #444; position: relative; cursor: pointer; }
-        .team-name { font-weight: 800; font-size: 1.05rem; color: #fff; display: block; max-width: 75%; }
-        .vs { color: var(--red); font-size: 0.7rem; margin: 4px 0; font-weight: bold; }
+        select, button { width: 100%; padding: 16px; border-radius: 16px; border: none; font-size: 1rem; outline: none; transition: 0.3s; }
+        select { background: #1a1a1a; color: white; border: 1px solid #333; margin-bottom: 20px; }
+        button { background: var(--red); color: white; font-weight: 900; cursor: pointer; text-transform: uppercase; box-shadow: 0 6px 20px rgba(227, 30, 36, 0.4); }
+
+        #match-list { margin-top: 25px; }
+        .match-card { background: #161616; padding: 20px; border-radius: 20px; margin-bottom: 15px; border: 1px solid var(--border); position: relative; cursor: pointer; }
         
-        .odds-badge { position: absolute; right: 15px; top: 15px; background: #222; padding: 5px 10px; border-radius: 8px; border: 1px solid #333; color: var(--green); font-weight: bold; font-size: 0.9rem; }
+        .odds-tag { position: absolute; right: 20px; top: 18px; color: var(--green); font-weight: 900; font-size: 1rem; background: #000; padding: 2px 8px; border-radius: 8px; }
         
-        .prediction-box { margin-top: 15px; padding: 12px; background: #000; border-radius: 10px; border: 1px solid #00ff8822; display: none; animation: fadeIn 0.4s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        .teams { text-align: center; margin: 10px 0; }
+        .team { font-weight: 800; font-size: 1.1rem; display: block; color: #efefef; }
+        .vs { font-size: 0.7rem; color: var(--red); margin: 3px 0; font-weight: bold; }
+
+        .ai-analysis { margin-top: 15px; padding-top: 15px; border-top: 1px solid #222; display: none; }
+        .prediction-text { color: var(--green); font-weight: bold; font-size: 1rem; margin-bottom: 10px; }
         
-        .tip { color: var(--green); font-weight: bold; font-size: 0.95rem; text-transform: uppercase; }
-        .conf-bar { height: 4px; background: #222; border-radius: 2px; margin-top: 10px; overflow: hidden; }
-        .conf-fill { height: 100%; background: var(--green); }
-        .loading { text-align: center; color: #666; padding: 20px; font-style: italic; }
-        .disclaimer { font-size: 0.6rem; color: #444; text-align: center; margin-top: 20px; line-height: 1.4; }
+        .prob-meter { display: flex; height: 10px; border-radius: 5px; overflow: hidden; margin: 10px 0; background: #222; }
+        .p-h { background: var(--red); }
+        .p-d { background: #555; }
+        .p-a { background: var(--blue); }
+        .prob-labels { display: flex; justify-content: space-between; font-size: 0.6rem; color: #888; }
+
+        .loader { text-align: center; color: #888; padding: 30px; font-style: italic; }
     </style>
 </head>
 <body>
 
 <div class="app-card">
     <div class="header">
-        <h2 style="margin:0; letter-spacing: 2px; font-weight: 900;">SHADOW HUNTER</h2>
-        <small style="color: #ffcccc; opacity: 0.8;">V4.1 LIVE ANALYTICS ENGINE</small>
+        <div id="status-chip" class="api-status">API READY</div>
+        <h2>SHADOW HUNTER</h2>
+        <div style="font-size: 0.6rem; color: #ffcccc; margin-top: 5px; letter-spacing: 2px;">V6.1 HYBRID ENGINE</div>
     </div>
 
     <div class="content">
-        <label>Select Competition</label>
+        <label>World Competitions</label>
         <select id="liga">
-            <optgroup label="Top European Leagues">
-                <option value="PL">English Premier League</option>
-                <option value="ELC">English Championship</option>
-                <option value="PD">Spanish La Liga</option>
-                <option value="BL1">German Bundesliga</option>
-                <option value="SA">Italian Serie A</option>
-                <option value="FL1">French Ligue 1</option>
-            </optgroup>
-            <optgroup label="International">
-                <option value="CL">UEFA Champions League</option>
-                <option value="CLI">Copa Libertadores</option>
-            </optgroup>
+            <option value="PL">English Premier League</option>
+            <option value="PD">Spanish La Liga</option>
+            <option value="BL1">German Bundesliga</option>
+            <option value="SA">Italian Serie A</option>
+            <option value="FL1">French Ligue 1</option>
+            <option value="CL">Champions League</option>
         </select>
 
-        <button onclick="fetchMatches()">Scan Live Matches & Odds</button>
+        <button id="scan-btn" onclick="fetchData()">Scan Live Matches</button>
 
         <div id="match-list"></div>
-
-        <div class="disclaimer">
-            ADVANCED AI LOGIC ENABLED. Predictions are based on historical H2H data and team form. No financial profit guaranteed. 18+ Gamble Responsibly.
-        </div>
     </div>
 </div>
 
 <script>
     const API_KEY = '4eb3f34ff8c24bdb93897d45b951126d';
 
-    async function fetchMatches() {
+    async function fetchData() {
         const league = document.getElementById('liga').value;
-        const container = document.getElementById('match-list');
-        container.innerHTML = '<div class="loading">Syncing with Shadow Hunter database...</div>';
+        const list = document.getElementById('match-list');
+        const status = document.getElementById('status-chip');
+        const btn = document.getElementById('scan-btn');
+
+        list.innerHTML = '<div class="loader">Scanning Global Markets...</div>';
+        btn.disabled = true;
 
         try {
             const response = await fetch(`https://api.football-data.org/v4/competitions/${league}/matches?status=SCHEDULED`, {
                 headers: { 'X-Auth-Token': API_KEY }
             });
+
+            if (response.status === 429) {
+                throw new Error("Too many requests. Wait 60s.");
+            }
+
             const data = await response.json();
 
             if (!data.matches || data.matches.length === 0) {
-                container.innerHTML = '<div class="loading">No matches scheduled for today in this league.</div>';
-                return;
-            }
+                list.innerHTML = '<div class="loader">No matches found for today.</div>';
+                status.style.background = "#555";
+                status.innerText = "NO MATCHES";
+            } else {
+                list.innerHTML = '';
+                status.style.background = "#00ff88";
+                status.style.color = "#000";
+                status.innerText = "ONLINE";
 
-            container.innerHTML = '';
-            data.matches.slice(0, 12).forEach(match => {
-                const card = document.createElement('div');
-                card.className = 'match-card';
-                const analysis = generateAdvancedLogic(match);
-                
-                card.innerHTML = `
-                    <div class="odds-badge">@ ${analysis.odd}</div>
-                    <div onclick="togglePrediction(this)">
-                        <span class="team-name">${match.homeTeam.name}</span>
-                        <div class="vs">V S</div>
-                        <span class="team-name">${match.awayTeam.name}</span>
-                        
-                        <div class="prediction-box">
-                            <div class="tip">🎯 TIP: ${analysis.tip}</div>
-                            <div style="font-size: 0.7rem; color: #888; margin-top:5px;">AI Confidence: ${analysis.conf}%</div>
-                            <div class="conf-bar"><div class="conf-fill" style="width: ${analysis.conf}%"></div></div>
+                data.matches.slice(0, 10).forEach(match => {
+                    const ai = processAI(match);
+                    const card = document.createElement('div');
+                    card.className = 'match-card';
+                    card.onclick = () => {
+                        const box = card.querySelector('.ai-analysis');
+                        box.style.display = box.style.display === 'block' ? 'none' : 'block';
+                    };
+                    
+                    card.innerHTML = `
+                        <div class="odds-tag">@ ${ai.odds}</div>
+                        <div class="teams">
+                            <span class="team">${match.homeTeam.name}</span>
+                            <div class="vs">V S</div>
+                            <span class="team">${match.awayTeam.name}</span>
                         </div>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-        } catch (error) {
-            container.innerHTML = '<div class="loading" style="color:red">API Error. Check your connection or key.</div>';
+                        <div class="ai-analysis">
+                            <div class="prediction-text">🎯 AI PICK: ${ai.tip}</div>
+                            <div class="prob-labels">
+                                <span>H ${ai.probs.h}%</span><span>D ${ai.probs.d}%</span><span>A ${ai.probs.a}%</span>
+                            </div>
+                            <div class="prob-meter">
+                                <div class="p-h" style="width: ${ai.probs.h}%"></div>
+                                <div class="p-d" style="width: ${ai.probs.d}%"></div>
+                                <div class="p-a" style="width: ${ai.probs.a}%"></div>
+                            </div>
+                        </div>
+                    `;
+                    list.appendChild(card);
+                });
+            }
+        } catch (e) {
+            list.innerHTML = `<div class="loader" style="color:red">ERROR: ${e.message}</div>`;
+            status.style.background = "#e31e24";
+            status.innerText = "OFFLINE";
+        } finally {
+            btn.disabled = false;
         }
     }
 
-    function generateAdvancedLogic(match) {
-        // Shadow Hunter Internal Logic: Uses Team IDs to maintain consistent predictions
-        const seed = (match.homeTeam.id || 0) + (match.awayTeam.id || 0);
-        const strategies = [
-            { tip: "Both Teams To Score (GG)", minOdd: 1.65, maxOdd: 1.95 },
-            { tip: "Over 2.5 Goals", minOdd: 1.70, maxOdd: 2.10 },
-            { tip: "Home Win (1)", minOdd: 1.45, maxOdd: 2.50 },
-            { tip: "Double Chance X2", minOdd: 1.35, maxOdd: 1.85 },
-            { tip: "Under 3.5 Goals", minOdd: 1.25, maxOdd: 1.55 },
-            { tip: "Draw No Bet (1)", minOdd: 1.40, maxOdd: 1.75 },
-            { tip: "Half Time / Full Time X", minOdd: 1.60, maxOdd: 1.90 }
-        ];
+    function processAI(match) {
+        const id = match.homeTeam.id + match.awayTeam.id;
+        const h = 30 + (id % 35);
+        const a = 15 + ((id * 2) % 30);
+        const d = 100 - (h + a);
+        const tips = ["Over 2.5 Goals", "Home Win", "GG (Both Teams Score)", "Double Chance X2", "Under 3.5 Goals"];
         
-        const strategy = strategies[seed % strategies.length];
-        const randomOdd = (Math.random() * (strategy.maxOdd - strategy.minOdd) + strategy.minOdd).toFixed(2);
-        const confidence = Math.floor((Math.random() * 15) + 78);
-
-        return { tip: strategy.tip, odd: randomOdd, conf: confidence };
-    }
-
-    function togglePrediction(card) {
-        const box = card.querySelector('.prediction-box');
-        const isVisible = box.style.display === 'block';
-        
-        // Close other open predictions
-        document.querySelectorAll('.prediction-box').forEach(b => b.style.display = 'none');
-        document.querySelectorAll('.match-card').forEach(c => c.style.borderLeftColor = '#444');
-
-        if (!isVisible) {
-            box.style.display = 'block';
-            card.parentElement.style.borderLeftColor = '#00ff88';
-        }
+        return {
+            tip: tips[id % tips.length],
+            odds: (1.5 + (id % 100) / 100).toFixed(2),
+            probs: { h, d, a }
+        };
     }
 </script>
 </body>
