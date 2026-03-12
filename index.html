@@ -1,179 +1,29 @@
 <!DOCTYPE html>
-<html lang="ro">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>SHADOW HUNTER OMNIDATA</title>
+    <title>SHADOW HUNTER PRO | Global Analytics</title>
     <style>
-        :root { --gold: #d4af37; --red: #ff003c; --bg: #050505; --panel: #111; }
-        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; padding: 0; }
+        :root { --accent: #d4af37; --red: #ff003c; --bg: #050505; --card: #121212; --blue: #00f3ff; }
+        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
         
-        .app-wrapper { width: 100%; max-width: 500px; margin: 0 auto; min-height: 100vh; display: flex; flex-direction: column; }
+        .app-container { width: 100%; max-width: 500px; margin: 0 auto; min-height: 100vh; padding: 15px; box-sizing: border-box; }
         
-        /* Premium Header */
-        header { padding: 30px 20px; text-align: center; border-bottom: 1px solid #222; }
-        .logo { font-size: 1.6rem; font-weight: 900; letter-spacing: 5px; color: var(--gold); }
-        
-        /* Database Controls */
-        .db-controls { padding: 20px; background: var(--panel); border-radius: 0 0 25px 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .label { font-size: 0.65rem; color: #666; text-transform: uppercase; margin-bottom: 8px; display: block; letter-spacing: 1px; }
+        header { text-align: center; padding: 25px 0; border-bottom: 1px solid #1a1a1a; margin-bottom: 20px; }
+        .logo { font-size: 1.5rem; font-weight: 900; letter-spacing: 7px; color: var(--accent); text-transform: uppercase; }
+        .version { font-size: 0.5rem; color: #444; margin-top: 5px; letter-spacing: 2px; }
+
+        /* DB Controls */
+        .db-panel { background: #0c0c0c; padding: 20px; border-radius: 20px; border: 1px solid #222; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .label { font-size: 0.6rem; color: #666; text-transform: uppercase; letter-spacing: 1.5px; display: block; margin-bottom: 10px; }
         
         select, .btn-scan { 
-            width: 100%; padding: 16px; border-radius: 12px; border: 1px solid #333; 
-            background: #1a1a1a; color: #fff; font-size: 0.9rem; margin-bottom: 15px; outline: none;
+            width: 100%; padding: 16px; border-radius: 12px; background: #1a1a1a; color: #fff; 
+            border: 1px solid #333; font-size: 0.9rem; margin-bottom: 12px; outline: none; appearance: none;
         }
         
         .btn-scan { 
             background: var(--red); border: none; font-weight: 900; text-transform: uppercase; 
-            cursor: pointer; box-shadow: 0 5px 15px rgba(255, 0, 60, 0.3);
+            cursor: pointer; letter-spacing: 1px; transition: 0.2s;
         }
-
-        /* VIP Paywall Section */
-        .vip-card {
-            margin: 20px; border: 2px solid var(--gold); border-radius: 20px;
-            padding: 20px; position: relative; background: linear-gradient(145deg, #111, #000);
-        }
-        .locked-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85); z-index: 5; border-radius: 18px;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-        }
-        .btn-pay {
-            background: var(--gold); color: #000; border: none; padding: 12px 25px;
-            border-radius: 25px; font-weight: 900; cursor: pointer; margin-top: 10px;
-        }
-
-        /* Results List */
-        .results-list { padding: 0 20px 100px; }
-        .match-node {
-            background: #111; border-radius: 15px; padding: 18px; margin-bottom: 12px;
-            border-left: 4px solid var(--red); animation: fadeIn 0.4s ease;
-        }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
-        .match-info { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .prediction { background: #000; padding: 10px; border-radius: 8px; border: 1px solid #222; display: flex; justify-content: space-between; }
-        .odd { color: var(--gold); font-weight: bold; }
-    </style>
-</head>
-<body>
-
-<div class="app-wrapper">
-    <header>
-        <div class="logo">SHADOW HUNTER</div>
-        <div style="font-size: 0.6rem; color: #444; margin-top: 5px;">OMNIDATA ENGINE V11.0</div>
-    </header>
-
-    <div class="db-controls">
-        <span class="label">Selectează Regiunea / Liga</span>
-        <select id="omni-db">
-            <optgroup label="EUROPA - TOP 5">
-                <option value="ENG_1">Premier League (Anglia)</option>
-                <option value="ESP_1">La Liga (Spania)</option>
-                <option value="GER_1">Bundesliga (Germania)</option>
-                <option value="ITA_1">Serie A (Italia)</option>
-                <option value="FRA_1">Ligue 1 (Franța)</option>
-            </optgroup>
-            <optgroup label="EUROPA - LIGI SECUNDE">
-                <option value="ENG_2">Championship (Anglia 2)</option>
-                <option value="ESP_2">La Liga 2 (Spania 2)</option>
-                <option value="GER_2">2. Bundesliga (Germania 2)</option>
-                <option value="ITA_2">Serie B (Italia 2)</option>
-                <option value="FRA_2">Ligue 2 (Franța 2)</option>
-            </optgroup>
-            <optgroup label="EUROPA - ALTE LIGI">
-                <option value="ROM_1">Superliga (România)</option>
-                <option value="NED_1">Eredivisie (Olanda)</option>
-                <option value="POR_1">Primeira Liga (Portugalia)</option>
-                <option value="TUR_1">Süper Lig (Turcia)</option>
-                <option value="GRE_1">Super League (Grecia)</option>
-            </optgroup>
-            <optgroup label="AMERICI & ASIA">
-                <option value="BRA_1">Serie A (Brazilia)</option>
-                <option value="ARG_1">Liga Profesional (Argentina)</option>
-                <option value="USA_1">MLS (USA)</option>
-                <option value="JPN_1">J1 League (Japonia)</option>
-            </optgroup>
-        </select>
-        <button class="btn-scan" onclick="startOmniScan()">Execută Analiză Globală</button>
-    </div>
-
-    <div class="vip-card" id="vip-container">
-        <div class="locked-overlay" id="vip-lock">
-            <span style="font-size: 0.7rem; letter-spacing: 2px; color: var(--gold);">PREDICȚIE VIP GOLD</span>
-            <div style="font-size: 1.4rem; font-weight: 900; margin: 5px 0;">4.99 RON</div>
-            <button class="btn-pay" onclick="unlockVip()">DEBLOCHEAZĂ BILETUL</button>
-        </div>
-        <div style="text-align: center;">
-            <div style="color: var(--gold); font-size: 0.8rem;">Cota Zilei (Safe Max)</div>
-            <div id="vip-match" style="margin: 10px 0; font-weight: bold;">[LOCK] vs [LOCK]</div>
-            <div style="font-size: 1.2rem; color: #00ff88;">Pont: [BLOCKED]</div>
-        </div>
-    </div>
-
-    <div class="results-list" id="omni-results"></div>
-</div>
-
-<script>
-    // Bază de date simulată pentru ligi secundare și mari
-    const db_mock = {
-        "ENG_2": [{h: "Burnley", a: "Leeds"}, {h: "Sunderland", a: "Middlesbrough"}, {h: "Coventry", a: "Hull City"}],
-        "ROM_1": [{h: "FCSB", a: "Univ. Craiova"}, {h: "Rapid", a: "CFR Cluj"}, {h: "Dinamo", a: "Farul"}],
-        "GER_2": [{h: "Hamburger SV", a: "Schalke 04"}, {h: "Hertha Berlin", a: "FC Koln"}],
-        "ITA_2": [{h: "Palermo", a: "Sampdoria"}, {h: "Bari", a: "Sassuolo"}],
-        "BRA_1": [{h: "Flamengo", a: "Botafogo"}, {h: "Palmeiras", a: "Sao Paulo"}],
-        "ENG_1": [{h: "Arsenal", a: "Man. City"}, {h: "Liverpool", a: "Chelsea"}]
-    };
-
-    function startOmniScan() {
-        const league = document.getElementById('omni-db').value;
-        const results = document.getElementById('omni-results');
-        results.innerHTML = '<div style="text-align:center; padding:20px; color:var(--red);">INTEROGARE BAZĂ DE DATE OMNIDATA...</div>';
-        
-        setTimeout(() => {
-            results.innerHTML = '';
-            // Dacă liga există în mock, o folosim, altfel generăm generic
-            const matches = db_mock[league] || [{h: "Echipa Gazdă", a: "Echipa Oaspete"}, {h: "Club Local", a: "Rival District"}];
-            
-            matches.forEach((m, i) => {
-                const analysis = generateAnalysis(m.h, m.a);
-                results.innerHTML += `
-                    <div class="match-node">
-                        <div class="match-info">
-                            <span style="font-weight:bold;">${m.h} - ${m.a}</span>
-                            <span style="font-size:0.6rem; color:#666;">ID: ${Math.floor(Math.random()*9000)}</span>
-                        </div>
-                        <div class="prediction">
-                            <span style="color:#00f3ff; font-weight:bold;">${analysis.tip}</span>
-                            <span class="odd">@${analysis.odd}</span>
-                        </div>
-                        <div style="height:2px; background:#222; margin-top:10px; width:100%;">
-                            <div style="height:100%; background:var(--gold); width:${analysis.conf}%;"></div>
-                        </div>
-                    </div>
-                `;
-            });
-        }, 1200);
-    }
-
-    function generateAnalysis(h, a) {
-        const rand = Math.random();
-        const tips = ["Peste 2.5 Goluri", "Victorie Gazde", "Ambele Marchează", "Asian Handicap -1", "Sub 3.5 Goluri", "Peste 9.5 Cornere"];
-        return {
-            tip: tips[Math.floor(rand * tips.length)],
-            odd: (1.45 + rand * 1.8).toFixed(2),
-            conf: Math.floor(65 + rand * 30)
-        };
-    }
-
-    function unlockVip() {
-        // Integrare cu Google Billing - Interfață
-        if(confirm("Confirmați plata de 4.99 RON prin Google Play?")) {
-            document.getElementById('vip-lock').style.display = 'none';
-            document.getElementById('vip-match').innerHTML = "LIVERPOOL vs REAL MADRID";
-            alert("Bilet VIP Deblocat cu succes!");
-        }
-    }
-</script>
-</body>
-</html>
