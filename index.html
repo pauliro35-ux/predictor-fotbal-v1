@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ro">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>⚽️GOAL ANALYZER⚽️</title>
+    <title>SHADOW HUNTER | GOAL PREDICTOR</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Inter:wght@400;800&display=swap" rel="stylesheet">
     <style>
         :root { --gold: #d4af37; --red: #ff003c; --blue: #00f3ff; --bg: #000; }
@@ -67,36 +67,32 @@
 <div class="panel">
     <span class="label">Regional Database Select</span>
     <select id="league-select">
-        <optgroup label="ROMÂNIA">
+        <optgroup label="ELITE LEAGUES">
+            <option value="39">Premier League (UK)</option>
+            <option value="140">La Liga (ESP)</option>
+            <option value="135">Serie A (ITA)</option>
+            <option value="78">Bundesliga (GER)</option>
+            <option value="61">Ligue 1 (FRA)</option>
+        </optgroup>
+        <optgroup label="EUROPEAN CUPS">
+            <option value="2">Champions League</option>
+            <option value="3">Europa League</option>
+            <option value="848">Conference League</option>
+        </optgroup>
+        <optgroup label="SECONDARY DIVISIONS">
+            <option value="40">Championship (UK)</option>
+            <option value="141">La Liga 2 (ESP)</option>
+            <option value="136">Serie B (ITA)</option>
+            <option value="79">2. Bundesliga (GER)</option>
+            <option value="62">Ligue 2 (FRA)</option>
+        </optgroup>
+        <optgroup label="OTHER REGIONS">
             <option value="283">Superliga (ROM)</option>
             <option value="284">Liga 2 (ROM)</option>
-        </optgroup>
-        <optgroup label="ANGLIA">
-            <option value="39">Premier League</option>
-            <option value="40">Championship</option>
-            <option value="41">League One</option>
-        </optgroup>
-        <optgroup label="SPANIA">
-            <option value="140">La Liga</option>
-            <option value="141">La Liga 2</option>
-        </optgroup>
-        <optgroup label="ITALIA">
-            <option value="135">Serie A</option>
-            <option value="136">Serie B</option>
-        </optgroup>
-        <optgroup label="GERMANIA">
-            <option value="78">Bundesliga</option>
-            <option value="79">2. Bundesliga</option>
-        </optgroup>
-        <optgroup label="FRANȚA">
-            <option value="61">Ligue 1</option>
-            <option value="62">Ligue 2</option>
-        </optgroup>
-        <optgroup label="ALTE LIGI EUROPA">
-            <option value="94">Portugalia (Primeira)</option>
-            <option value="88">Olanda (Eredivisie)</option>
-            <option value="144">Belgia (Pro League)</option>
-            <option value="203">Turcia (Süper Lig)</option>
+            <option value="94">Primeira Liga (POR)</option>
+            <option value="88">Eredivisie (NED)</option>
+            <option value="144">Pro League (BEL)</option>
+            <option value="203">Süper Lig (TUR)</option>
         </optgroup>
     </select>
     <button class="btn-scan" onclick="runGoalScan()">EXECUTE DEEP SCAN</button>
@@ -155,7 +151,7 @@
             } else {
                 status.innerText = "NODE_EMPTY: NO UPCOMING MATCHES";
                 status.style.color = "#444";
-                resDiv.innerHTML = '<p style="text-align:center; color:#333; padding:20px;">Nu există date disponibile în acest moment pentru liga selectată.</p>';
+                resDiv.innerHTML = '<p style="text-align:center; color:#333; padding:20px;">No data available at the moment for this league.</p>';
             }
         } catch (e) {
             status.innerText = "UPLINK_ERROR: CHECK NETWORK";
@@ -165,12 +161,12 @@
 
     function getGoalTip() {
         const tips = [
-            "Ambele Marchează - DA", 
-            "Peste 2.5 Goluri", 
-            "Peste 1.5 Goluri", 
-            "Sub 3.5 Goluri", 
-            "Peste 0.5 Goluri HT",
-            "GG sau Peste 2.5"
+            "Both Teams To Score - YES", 
+            "Over 2.5 Goals", 
+            "Over 1.5 Goals", 
+            "Under 3.5 Goals", 
+            "Over 0.5 Goals HT",
+            "GG or Over 2.5"
         ];
         return tips[Math.floor(Math.random() * tips.length)];
     }
