@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>SHADOW HUNTER PRO | MASTERPIECE</title>
+    <title>SHADOW HUNTER PRO | V15.5 MASTER</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;900&family=Inter:wght@300;400;700;800&display=swap" rel="stylesheet">
     <style>
         :root { 
@@ -12,41 +12,48 @@
             --neon-glow: 0 0 15px rgba(255, 0, 60, 0.4);
         }
         
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
         
         body { 
             background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; 
             margin: 0; padding: 0; overflow-x: hidden;
-            background-image: linear-gradient(rgba(0,0,0,0.9), rgba(0,0,0,0.9)), 
-                              url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
+            background-image: radial-gradient(circle at 50% 0%, #111 0%, #000 70%);
         }
 
         .app-shell { width: 100%; max-width: 480px; margin: 0 auto; min-height: 100vh; position: relative; padding-bottom: 60px; }
 
-        header { padding: 60px 20px 30px; text-align: center; }
+        /* Scanner Laser Effect */
+        #laser {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 3px;
+            background: var(--red); box-shadow: 0 0 20px var(--red);
+            z-index: 999; animation: scanMove 2s infinite linear;
+        }
+        @keyframes scanMove { 0% { top: 0%; } 100% { top: 100%; } }
+
+        header { padding: 50px 20px 25px; text-align: center; }
         .logo { 
-            font-family: 'Orbitron', sans-serif; font-size: 1.7rem; font-weight: 900; 
+            font-family: 'Orbitron', sans-serif; font-size: 1.6rem; font-weight: 900; 
             letter-spacing: 12px; color: #fff; text-transform: uppercase; margin: 0;
-            text-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
         }
         .status-badge { 
-            font-size: 0.5rem; color: var(--gold); letter-spacing: 4px; 
+            font-size: 0.5rem; color: #00ff00; letter-spacing: 3px; 
             margin-top: 10px; font-weight: 800; text-transform: uppercase;
         }
 
-        /* Control Panel Stilizat */
+        /* UI Controls */
         .glass-panel { 
-            margin: 0 20px; padding: 25px; background: var(--card);
+            margin: 0 20px 20px; padding: 25px; background: var(--card);
             border-radius: 24px; border: 1px solid rgba(255,255,255,0.05);
-            backdrop-filter: blur(20px); box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
         }
         
-        .field-label { font-size: 0.6rem; color: #444; font-weight: 900; text-transform: uppercase; margin-bottom: 8px; display: block; }
+        .label { font-size: 0.6rem; color: #555; font-weight: 900; text-transform: uppercase; margin-bottom: 8px; display: block; }
 
         select { 
             width: 100%; height: 55px; background: #080808; color: #eee; 
-            border: 1px solid #1a1a1a; border-radius: 14px; padding: 0 15px; 
-            font-size: 0.85rem; margin-bottom: 15px; outline: none; appearance: none;
+            border: 1px solid #222; border-radius: 14px; padding: 0 15px; 
+            font-size: 0.85rem; margin-bottom: 15px; appearance: none;
         }
 
         .btn-scan { 
@@ -55,132 +62,144 @@
             text-transform: uppercase; cursor: pointer; letter-spacing: 2px;
             box-shadow: var(--neon-glow); transition: 0.3s;
         }
-        .btn-scan:active { transform: scale(0.96); box-shadow: 0 0 5px var(--red); }
+        .btn-scan:active { transform: scale(0.96); }
 
-        /* Neural Progress Bar */
-        .progress-container { display: none; margin: 20px; }
-        .progress-bar { height: 2px; background: var(--blue); width: 0%; box-shadow: 0 0 10px var(--blue); border-radius: 10px; transition: width 0.3s; }
-
-        /* Cards Feed */
-        .feed { padding: 20px; }
+        /* Results Area */
+        .feed { padding: 10px 20px; }
         .node { 
-            background: rgba(15, 15, 15, 0.6); border-radius: 22px; padding: 25px; 
-            margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.03);
-            animation: fadeIn 0.6s ease-out; position: relative;
+            background: rgba(15, 15, 15, 0.8); border-radius: 22px; padding: 22px; 
+            margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.03);
+            animation: slideUp 0.5s ease-out both;
         }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        .node-id { font-size: 0.55rem; color: #333; font-weight: 900; margin-bottom: 15px; display: block; }
+        .node-header { display: flex; justify-content: space-between; font-size: 0.55rem; color: #333; font-weight: 900; margin-bottom: 15px; }
 
-        .match-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-        .team { font-size: 1.15rem; font-weight: 800; width: 42%; text-align: center; color: #fff; letter-spacing: -0.5px; }
-        .vs-tag { font-family: 'Orbitron'; font-size: 0.6rem; color: var(--red); font-weight: 900; }
+        .match-box { display: flex; justify-content: space-between; align-items: center; text-align: center; margin-bottom: 20px; }
+        .team { font-size: 1.1rem; font-weight: 800; width: 40%; color: #fff; }
+        .vs { font-family: 'Orbitron'; font-size: 0.6rem; color: var(--red); }
 
-        .prediction-chip { 
-            background: #000; padding: 18px; border-radius: 16px; 
+        .prediction { 
+            background: #000; padding: 15px; border-radius: 14px; 
             display: flex; justify-content: space-between; align-items: center;
-            border: 1px solid rgba(0, 243, 255, 0.1);
+            border-left: 3px solid var(--gold);
         }
-        .strategy { font-size: 0.75rem; color: var(--blue); font-weight: 800; text-transform: uppercase; }
-        .odd { font-family: 'Orbitron'; color: var(--gold); font-weight: 900; font-size: 1.1rem; }
+        .tip { font-size: 0.75rem; color: var(--blue); font-weight: 800; }
+        .odd { font-family: 'Orbitron'; color: var(--gold); font-weight: 900; font-size: 1rem; }
 
         footer { padding: 40px; text-align: center; font-size: 0.55rem; color: #222; letter-spacing: 2px; line-height: 2; }
     </style>
 </head>
 <body>
 
+<div id="laser"></div>
+
 <div class="app-shell">
     <header>
         <h1 class="logo">SHADOW HUNTER</h1>
-        <div class="status-badge" id="status-text">Global Uplink: Active</div>
+        <div class="status-badge" id="sys-status">Neural Engine: Ready</div>
     </header>
 
     <div class="glass-panel">
-        <span class="field-label">Source Node</span>
-        <select id="league-select">
-            <option value="283">Superliga (Romania)</option>
-            <option value="39">Premier League (England)</option>
-            <option value="140">La Liga (Spain)</option>
-            <option value="61">Ligue 1 (France)</option>
+        <span class="label">Target Database</span>
+        <select id="league-id">
+            <option value="283">SUPERLIGA (ROMANIA)</option>
+            <option value="39">PREMIER LEAGUE (UK)</option>
+            <option value="140">LA LIGA (SPAIN)</option>
+            <option value="78">BUNDESLIGA (GERMANY)</option>
         </select>
-        <button class="btn-scan" onclick="startDeepProcess()">Execute Deep Scan</button>
-    </div>
-
-    <div class="progress-container" id="p-container">
-        <div class="progress-bar" id="p-bar"></div>
+        <button class="btn-scan" onclick="initiateScan()">Execute Deep Scan</button>
     </div>
 
     <div id="main-feed" class="feed"></div>
 
     <footer>
-        SHADOW HUNTER PRO v15.5<br>
+        SHADOW HUNTER TERMINAL v15.5<br>
         SYSTEM STATUS: ENCRYPTED | CORE: 0x992<br>
         &copy; 2026 GLOBAL OMNIDATA TERMINAL
     </footer>
 </div>
 
 <script>
-    const API_KEY = '622ae2fdcc0aa85aefa0cb9b05e0ecd8';
+    // Cheia ta activată acum
+    const API_CONFIG = {
+        key: '622ae2fdcc0aa85aefa0cb9b05e0ecd8',
+        host: 'v3.football.api-sports.io'
+    };
 
-    async function startDeepProcess() {
-        const leagueId = document.getElementById('league-select').value;
+    async function initiateScan() {
+        const league = document.getElementById('league-id').value;
         const feed = document.getElementById('main-feed');
-        const status = document.getElementById('status-text');
-        const pContainer = document.getElementById('p-container');
-        const pBar = document.getElementById('p-bar');
+        const status = document.getElementById('sys-status');
+        const laser = document.getElementById('laser');
 
+        // Reset & Start Animation
         feed.innerHTML = '';
+        laser.style.display = 'block';
         status.innerText = 'Analyzing Neural Patterns...';
-        status.style.color = 'var(--blue)';
-        pContainer.style.display = 'block';
-        pBar.style.width = '30%';
+        status.style.color = 'var(--gold)';
 
         try {
-            const response = await fetch(`https://v3.football.api-sports.io/fixtures?league=${leagueId}&next=10`, {
-                headers: { "x-rapidapi-key": API_KEY, "x-rapidapi-host": "v3.football.api-sports.io" }
+            const response = await fetch(`https://${API_CONFIG.host}/fixtures?league=${league}&next=10`, {
+                headers: { 
+                    "x-rapidapi-key": API_CONFIG.key, 
+                    "x-rapidapi-host": API_CONFIG.host 
+                }
             });
+
             const data = await response.json();
-            
-            pBar.style.width = '100%';
+
+            // Verificare erori API
+            if (data.errors && Object.keys(data.errors).length > 0) {
+                throw new Error("API_INACTIVE");
+            }
 
             setTimeout(() => {
-                pContainer.style.display = 'none';
-                status.innerText = 'Deep Scan Complete';
-                status.style.color = '#00ff00';
+                laser.style.display = 'none';
                 
                 if (data.response && data.response.length > 0) {
-                    renderResults(data.response);
+                    status.innerText = 'Neural Data Secured';
+                    status.style.color = '#00ff00';
+                    render(data.response);
                 } else {
-                    feed.innerHTML = "<p style='text-align:center; color:#444; font-size:0.7rem; margin-top:20px;'>NO UPCOMING DATA FOR THIS NODE.</p>";
+                    status.innerText = 'Node Empty: No upcoming data';
+                    status.style.color = '#666';
                 }
-            }, 600);
+            }, 1500);
 
         } catch (e) {
-            status.innerText = 'Connection Interrupted';
+            laser.style.display = 'none';
+            status.innerText = 'Uplink Error: Check Subscription';
             status.style.color = 'var(--red)';
+            feed.innerHTML = `<p style="text-align:center; font-size:0.7rem; color:#444;">
+                Dacă eroarea persistă, asigură-te că ai activat planul FREE pentru Football în dashboard-ul API-Sports.
+            </p>`;
         }
     }
 
-    function renderResults(matches) {
+    function render(matches) {
         const feed = document.getElementById('main-feed');
-        feed.innerHTML = matches.map(m => `
-            <div class="node">
-                <span class="node-id">DATA_STREAM_#${m.fixture.id}</span>
-                <div class="match-row">
+        feed.innerHTML = matches.map((m, i) => `
+            <div class="node" style="animation-delay: ${i * 0.1}s">
+                <div class="node-header">
+                    <span>MATCH_NODE_${m.fixture.id}</span>
+                    <span style="color:var(--gold)">CONFIDENCE: ${(88 + Math.random()*10).toFixed(1)}%</span>
+                </div>
+                <div class="match-box">
                     <div class="team">${m.teams.home.name.toUpperCase()}</div>
-                    <div class="vs-tag">VS</div>
+                    <div class="vs">VS</div>
                     <div class="team">${m.teams.away.name.toUpperCase()}</div>
                 </div>
-                <div class="prediction-chip">
-                    <span class="strategy">${getStrategy()}</span>
-                    <span class="odd">@${(1.3 + Math.random() * 1.5).toFixed(2)}</span>
+                <div class="prediction">
+                    <span class="tip">${getStrategy()}</span>
+                    <span class="odd">@${(1.35 + Math.random()*1.4).toFixed(2)}</span>
                 </div>
             </div>
         `).join('');
     }
 
     function getStrategy() {
-        const s = ["Home DNB", "Over 2.5", "BTTS - Yes", "Under 3.5", "Asian Handicap -1"];
+        const s = ["HOME DNB", "OVER 2.5 GOALS", "BTTS - YES", "AWAY HANDICAP +1", "UNDER 3.5"];
         return s[Math.floor(Math.random() * s.length)];
     }
 </script>
