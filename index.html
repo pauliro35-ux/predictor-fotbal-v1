@@ -1,188 +1,147 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ro">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>SHADOW HUNTER PRO | Global Analytics</title>
+    <title>SHADOW HUNTER PRO v13.5</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        :root { --accent: #d4af37; --red: #ff003c; --bg: #050505; --card: #121212; --blue: #00f3ff; }
-        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
+        :root { --gold: #d4af37; --red: #ff003c; --bg: #050505; --card: #121212; --blue: #00f3ff; }
+        body { 
+            background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; 
+            margin: 0; padding: 0; -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
         
-        .app-container { width: 100%; max-width: 500px; margin: 0 auto; min-height: 100vh; padding: 15px; box-sizing: border-box; }
+        .app-shell { width: 100%; max-width: 500px; margin: 0 auto; min-height: 100vh; display: flex; flex-direction: column; }
         
-        header { text-align: center; padding: 25px 0; border-bottom: 1px solid #1a1a1a; margin-bottom: 20px; }
-        .logo { font-size: 1.5rem; font-weight: 900; letter-spacing: 7px; color: var(--accent); text-transform: uppercase; }
+        header { padding: 40px 20px 20px; text-align: center; border-bottom: 1px solid #1a1a1a; margin-bottom: 10px; }
+        .logo { font-size: 1.6rem; font-weight: 900; letter-spacing: 8px; color: var(--gold); text-transform: uppercase; text-shadow: 0 0 15px rgba(212, 175, 55, 0.3); }
         .version { font-size: 0.5rem; color: #444; margin-top: 5px; letter-spacing: 2px; }
 
-        /* DB Controls */
-        .db-panel { background: #0c0c0c; padding: 20px; border-radius: 20px; border: 1px solid #222; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .label { font-size: 0.6rem; color: #666; text-transform: uppercase; letter-spacing: 1.5px; display: block; margin-bottom: 10px; }
+        /* DB Controls - Optimizate */
+        .sticky-controls { position: sticky; top: 0; z-index: 100; background: rgba(5,5,5,0.92); backdrop-filter: blur(12px); padding: 15px 20px; border-bottom: 1px solid #222; }
+        .label { font-size: 0.6rem; color: #666; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; display: block; }
         
         select, .btn-scan { 
-            width: 100%; padding: 16px; border-radius: 12px; background: #1a1a1a; color: #fff; 
-            border: 1px solid #333; font-size: 0.9rem; margin-bottom: 12px; outline: none; appearance: none;
+            width: 100%; height: 55px; border-radius: 14px; background: #1a1a1a; color: #fff; 
+            border: 1px solid #333; font-size: 0.9rem; margin-bottom: 15px; outline: none; transition: 0.3s;
         }
         
         .btn-scan { 
             background: var(--red); border: none; font-weight: 900; text-transform: uppercase; 
-            cursor: pointer; letter-spacing: 1px; transition: 0.2s;
+            cursor: pointer; box-shadow: 0 10px 20px rgba(255, 0, 60, 0.2);
         }
-        .btn-scan:active { transform: scale(0.98); opacity: 0.8; }
+        .btn-scan:active { transform: scale(0.97); }
 
-        /* VIP SECTION */
-        .vip-vault {
-            background: linear-gradient(145deg, #151515, #000); border: 1px solid var(--accent);
-            border-radius: 22px; padding: 30px; margin-bottom: 25px; text-align: center; position: relative;
-            overflow: hidden;
+        /* Data List */
+        .feed { padding: 0 20px 100px; }
+        .node { 
+            background: var(--card); border-radius: 20px; padding: 20px; margin-bottom: 15px;
+            border: 1px solid #1a1a1a; animation: fadeInUp 0.5s ease both;
         }
-        .lock-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 21px;
-            background: rgba(0,0,0,0.94); z-index: 10; display: flex; flex-direction: column; align-items: center; justify-content: center;
-            backdrop-filter: blur(4px);
-        }
-        .price-text { font-size: 1.8rem; font-weight: 900; color: var(--accent); margin: 8px 0; }
-        .btn-unlock { 
-            background: var(--accent); color: #000; border: none; padding: 14px 30px; 
-            border-radius: 30px; font-weight: 900; cursor: pointer; text-transform: uppercase; font-size: 0.8rem;
-        }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Results Display */
-        .match-card { background: var(--card); border-radius: 18px; padding: 20px; margin-bottom: 15px; border: 1px solid #1a1a1a; animation: slideUp 0.4s ease-out; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-        
-        .card-top { display: flex; justify-content: space-between; font-size: 0.7rem; font-weight: 700; color: #555; margin-bottom: 15px; border-bottom: 1px solid #1f1f1f; padding-bottom: 10px; }
-        .team-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .team-name { font-size: 1.05rem; font-weight: 800; width: 45%; }
-        
-        .prediction-row { background: #000; padding: 14px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #1a1a1a; }
-        .pick { color: var(--blue); font-weight: 900; font-size: 0.9rem; text-transform: uppercase; }
-        .odds { color: var(--accent); font-weight: bold; font-family: 'Courier New', monospace; font-size: 1.1rem; }
-        
-        .conf-meta { display: flex; justify-content: space-between; margin-top: 15px; font-size: 0.55rem; color: #444; font-weight: bold; text-transform: uppercase; }
-        .conf-bar { height: 3px; background: #111; margin-top: 6px; border-radius: 4px; overflow: hidden; }
-        .conf-fill { height: 100%; background: var(--accent); width: 0%; transition: 1.8s cubic-bezier(0.19, 1, 0.22, 1); }
+        .node-header { display: flex; justify-content: space-between; font-size: 0.6rem; color: #444; font-weight: bold; margin-bottom: 15px; }
+        .match-teams { display: grid; grid-template-columns: 1fr 40px 1fr; align-items: center; text-align: center; margin-bottom: 20px; }
+        .team { font-weight: 800; font-size: 1.1rem; }
 
-        footer { padding: 30px 10px; text-align: center; font-size: 0.6rem; color: #333; line-height: 1.6; }
+        .pick-box { background: #000; padding: 15px; border-radius: 14px; display: flex; justify-content: space-between; align-items: center; }
+        .pick-text { color: var(--blue); font-weight: 900; font-size: 0.85rem; }
+        .odd-text { color: var(--gold); font-weight: 700; font-family: monospace; font-size: 1.1rem; }
+
+        /* Loading Skeleton - Adăugat pentru UX Pro */
+        .skeleton { height: 120px; background: #1a1a1a; margin: 0 20px 15px; border-radius: 18px; position: relative; overflow: hidden; display: none; }
+        .skeleton::after { content: ""; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent); animation: shiver 1.5s infinite; }
+        @keyframes shiver { 100% { left: 100%; } }
+
+        /* Legal & Privacy Footer - Necesar pentru Play Store */
+        footer { padding: 40px 20px; text-align: center; font-size: 0.65rem; color: #333; line-height: 1.6; border-top: 1px solid #1a1a1a; }
     </style>
 </head>
 <body>
 
-<div class="app-container">
+<div class="app-shell">
     <header>
         <div class="logo">SHADOW HUNTER</div>
-        <div class="version">ELITE PRO DATA ENGINE v12.0</div>
+        <div class="version">ELITE PRO DATA ENGINE v13.5</div>
     </header>
 
-    <div class="db-panel">
-        <label class="label">OmniData Database Access</label>
-        <select id="league-db">
-            <optgroup label="EUROPE - TIER 1">
-                <option value="E1">Premier League (ENG)</option>
-                <option value="S1">La Liga (ESP)</option>
-                <option value="G1">Bundesliga (GER)</option>
-                <option value="I1">Serie A (ITA)</option>
-                <option value="F1">Ligue 1 (FRA)</option>
+    <div class="sticky-controls">
+        <label class="label">OmniData Global Database</label>
+        <select id="liga-select">
+            <optgroup label="EUROPA - ELITE">
+                <option value="ENG1">Premier League (ANG)</option>
+                <option value="ESP1">La Liga (SPA)</option>
+                <option value="ROM1">Superliga (ROM)</option>
             </optgroup>
-            <optgroup label="EUROPE - SECONDARY">
-                <option value="E2">Championship (ENG 2)</option>
-                <option value="S2">La Liga 2 (ESP 2)</option>
-                <option value="G2">2. Bundesliga (GER 2)</option>
-                <option value="I2">Serie B (ITA 2)</option>
-            </optgroup>
-            <optgroup label="GLOBAL & REGIONAL">
-                <option value="R1">Superliga (ROM)</option>
-                <option value="B1">Serie A (BRA)</option>
-                <option value="U1">MLS (USA)</option>
-                <option value="T1">Süper Lig (TUR)</option>
+            <optgroup label="GLOBAL & SECUNDE">
+                <option value="ENG2">Championship (ANG 2)</option>
+                <option value="BRA1">Serie A (BRA)</option>
             </optgroup>
         </select>
-        <button class="btn-scan" onclick="runGlobalScan()">Initialize Deep Scan</button>
+        <button class="btn-scan" onclick="startOptimizedScan()">Execute Deep Scan</button>
     </div>
 
-    <div class="vip-vault">
-        <div id="vip-gate" class="lock-overlay">
-            <span style="font-size: 0.6rem; letter-spacing: 3px; font-weight: bold;">PREMIUM VIP ACCESS</span>
-            <div class="price-text">$0.99</div>
-            <button class="btn-unlock" onclick="unlockPro()">Unlock VIP Node</button>
-        </div>
-        <div style="opacity: 0.2;">
-            <div style="font-size: 0.7rem; margin-bottom: 5px;">VIP ANALYSIS</div>
-            <div style="font-weight: 800;">HIDDEN_MATCH_DATA</div>
-            <div style="color: #00ff88;">Odds: 2.50</div>
-        </div>
-    </div>
+    <div id="loader" class="skeleton"></div>
 
-    <div id="results-container"></div>
+    <div class="feed" id="main-feed"></div>
 
     <footer>
-        <b>18+ RESPONSIBLE ANALYTICS.</b> Shadow Hunter provides statistical projections based on AI neural networks. These are not guaranteed outcomes. <br>
-        &copy; 2026 Shadow Hunter Pro Systems.
+        <b>18+ BEGAMBLEAWARE.</b><br>
+        Shadow Hunter Pro oferă proiecții statistice bazate pe inteligență artificială. Această aplicație nu facilitează pariurile cu bani reali. Predicțiile sunt bazate pe modele neurale istorice și nu sunt garantate.<br>
+        &copy; 2026 Shadow Hunter Global Analytics.
     </footer>
 </div>
 
 <script>
-    const MOCK_DB = {
-        "E2": [{h: "Burnley", a: "Leeds"}, {h: "Sheffield Utd", a: "Norwich"}, {h: "Luton", a: "Hull"}],
-        "R1": [{h: "FCSB", a: "CFR Cluj"}, {h: "Univ. Craiova", a: "Rapid"}, {h: "Dinamo", a: "Farul"}],
-        "E1": [{h: "Arsenal", a: "Liverpool"}, {h: "Man City", a: "Chelsea"}],
-        "B1": [{h: "Flamengo", a: "Botafogo"}, {h: "Palmeiras", a: "Corinthians"}]
-    };
-
-    function runGlobalScan() {
-        const league = document.getElementById('league-db').value;
-        const container = document.getElementById('results-container');
-        container.innerHTML = '<div style="text-align:center; padding:30px; font-size:0.8rem; color:var(--red); font-weight:bold; letter-spacing:1px;">QUERYING OMNIDATA SERVERS...</div>';
+    function startOptimizedScan() {
+        const feed = document.getElementById('main-feed');
+        const loader = document.getElementById('loader');
         
+        feed.innerHTML = '';
+        loader.style.display = 'block';
+
+        // Timp de așteptare simulat pentru a părea o procesare complexă
         setTimeout(() => {
-            container.innerHTML = '';
-            const list = MOCK_DB[league] || [{h: "Home Side", a: "Away Side"}, {h: "Team Alpha", a: "Team Beta"}];
+            loader.style.display = 'none';
             
-            list.forEach((m, i) => {
-                const data = computeAI(m.h, m.a);
-                container.innerHTML += `
-                    <div class="match-card">
-                        <div class="card-top">
-                            <span>MATCH_NODE_${Math.floor(Math.random()*90000)}</span>
-                            <span>PRO_RANK: #${i+1}</span>
+            // Date simulate bazate pe ligile selectate (aici poți adăuga logică reală de interogare a API-ului)
+            const mockMatches = [
+                {h: "Liverpool", a: "Arsenal"}, {h: "Luton", a: "Norwich"}, {h: "FCSB", a: "Rapid București"}
+            ];
+
+            mockMatches.forEach((m, i) => {
+                const analysis = generateProAnalysis(m.h, m.a);
+                feed.innerHTML += `
+                    <div class="node">
+                        <div class="node-header">
+                            <span>REF_DATA_#${1200 + i}</span>
+                            <span>PRO_RANK: ${analysis.rank}</span>
                         </div>
-                        <div class="team-row">
-                            <div class="team-name" style="text-align:right">${m.h}</div>
-                            <div style="color:var(--red); font-weight:900; font-size:0.6rem; margin:0 10px;">VS</div>
-                            <div class="team-name" style="text-align:left">${m.a}</div>
+                        <div class="match-teams">
+                            <div class="team">${m.h}</div>
+                            <div style="font-size:0.6rem; color:var(--red); font-weight:900;">VS</div>
+                            <div class="team">${m.a}</div>
                         </div>
-                        <div class="prediction-row">
-                            <span class="pick">${data.tip}</span>
-                            <span class="odds">@${data.odd}</span>
-                        </div>
-                        <div class="conf-meta">
-                            <span>Neural Confidence</span>
-                            <span>${data.conf}%</span>
-                        </div>
-                        <div class="conf-bar">
-                            <div class="conf-fill" id="bar-${i}"></div>
+                        <div class="pick-box">
+                            <span class="pick-text">${analysis.tip}</span>
+                            <span class="odd-text">@${analysis.odd}</span>
                         </div>
                     </div>
                 `;
-                setTimeout(() => { document.getElementById(`bar-${i}`).style.width = data.conf + '%'; }, 100);
             });
-        }, 1300);
+        }, 1500);
     }
 
-    function computeAI(h, a) {
-        const r = Math.random();
-        const strategies = ["Home Win (DNB)", "Over 2.25 Goals", "BTTS - YES", "Under 3.5 Goals", "Away AH +0.5", "Over 8.5 Corners"];
+    function generateProAnalysis(h, a) {
+        const seed = Math.random();
+        const tips = ["Vietorie Gazde (DNB)", "Peste 2.25 Goluri", "Ambele Marchează", "Asian Handicap -1", "Sub 3.5 Goluri"];
         return {
-            tip: strategies[Math.floor(r * strategies.length)],
-            odd: (1.40 + r * 1.5).toFixed(2),
-            conf: Math.floor(70 + r * 28)
+            tip: tips[Math.floor(seed * tips.length)],
+            odd: (1.30 + seed * 1.6).toFixed(2),
+            rank: seed > 0.8 ? "HIGH" : (seed > 0.5 ? "MED" : "LOW")
         };
-    }
-
-    function unlockPro() {
-        if(confirm("Initiate Secure In-App Purchase for $0.99?")) {
-            document.getElementById('vip-gate').style.display = 'none';
-            alert("VIP Node Unlocked Successfully.");
-        }
     }
 </script>
 </body>
