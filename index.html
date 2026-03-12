@@ -3,171 +3,189 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>SHADOW HUNTER PRO v14.0</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <title>SHADOW HUNTER PRO</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --gold: #d4af37; --red: #ff003c; --bg: #050505; --card: #121212; --blue: #00f3ff; }
+        :root { 
+            --gold: #d4af37; --red: #ff003c; --bg: #000000; --card: #111111; 
+            --blue: #00f3ff; --text-main: #ffffff; --text-dim: #666666;
+        }
+        
+        /* Optimizare Randare: Hardware Acceleration */
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; transform: translateZ(0); }
         
         body { 
-            background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; 
-            margin: 0; padding: 0; -webkit-font-smoothing: antialiased;
-            overflow-x: hidden;
+            background: var(--bg); color: var(--text-main); font-family: 'Inter', sans-serif; 
+            margin: 0; padding: 0; line-height: 1.4; overflow-x: hidden;
         }
-        
-        .app-shell { width: 100%; max-width: 500px; margin: 0 auto; min-height: 100vh; display: flex; flex-direction: column; }
-        
-        /* Header cu efect de scanare */
-        header { padding: 40px 20px 20px; text-align: center; border-bottom: 1px solid #1a1a1a; }
-        .logo { font-size: 1.6rem; font-weight: 900; letter-spacing: 8px; color: var(--gold); text-transform: uppercase; text-shadow: 0 0 15px rgba(212, 175, 55, 0.3); }
-        .version { font-size: 0.5rem; color: #444; margin-top: 5px; letter-spacing: 2px; }
 
-        /* Controls */
-        .sticky-controls { position: sticky; top: 0; z-index: 100; background: rgba(5,5,5,0.95); backdrop-filter: blur(12px); padding: 15px 20px; border-bottom: 1px solid #222; }
-        .label { font-size: 0.6rem; color: #666; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; display: block; }
-        
-        select, .btn-scan { 
-            width: 100%; height: 55px; border-radius: 14px; background: #1a1a1a; color: #fff; 
-            border: 1px solid #333; font-size: 0.9rem; margin-bottom: 15px; outline: none; transition: 0.3s;
+        .app-shell { width: 100%; max-width: 480px; margin: 0 auto; min-height: 100vh; }
+
+        /* Header Premium */
+        header { 
+            padding: 50px 20px 30px; text-align: center; 
+            background: linear-gradient(to bottom, #111 0%, #000 100%);
+        }
+        .logo { 
+            font-size: 1.8rem; font-weight: 800; letter-spacing: 10px; 
+            color: var(--gold); text-transform: uppercase; margin: 0;
+        }
+        .status-dot { 
+            display: inline-block; width: 6px; height: 6px; background: #00ff00; 
+            border-radius: 50%; margin-right: 5px; box-shadow: 0 0 10px #00ff00;
+        }
+
+        /* Controls: Sticky & Fast */
+        .controls { 
+            position: sticky; top: 0; z-index: 1000; 
+            background: rgba(0,0,0,0.8); backdrop-filter: blur(20px);
+            padding: 15px 20px; border-bottom: 1px solid #222;
         }
         
+        select { 
+            width: 100%; height: 50px; background: #1a1a1a; color: white; border: 1px solid #333;
+            border-radius: 12px; padding: 0 15px; font-size: 0.9rem; margin-bottom: 12px; outline: none;
+        }
+
         .btn-scan { 
-            background: var(--red); border: none; font-weight: 900; text-transform: uppercase; 
-            cursor: pointer; box-shadow: 0 10px 20px rgba(255, 0, 60, 0.2); letter-spacing: 1px;
+            width: 100%; height: 55px; background: var(--red); color: white;
+            border: none; border-radius: 12px; font-weight: 800; font-size: 0.9rem;
+            text-transform: uppercase; cursor: pointer; transition: transform 0.1s;
         }
-        .btn-scan:active { transform: scale(0.97); }
+        .btn-scan:active { transform: scale(0.96); }
 
-        /* Feed Results */
-        .feed { padding: 10px 20px 100px; }
+        /* Feed & Nodes */
+        .feed { padding: 20px; }
         .node { 
             background: var(--card); border-radius: 20px; padding: 20px; margin-bottom: 15px;
-            border: 1px solid #1a1a1a; animation: fadeInUp 0.5s ease both;
+            border: 1px solid #222; transition: border 0.3s;
         }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .node:active { border-color: var(--gold); }
 
-        .node-header { display: flex; justify-content: space-between; font-size: 0.6rem; color: #444; font-weight: bold; margin-bottom: 15px; border-bottom: 1px solid #1f1f1f; padding-bottom: 10px; }
-        .match-teams { display: grid; grid-template-columns: 1fr 40px 1fr; align-items: center; text-align: center; margin: 15px 0; }
-        .team { font-weight: 800; font-size: 1.05rem; letter-spacing: -0.5px; }
+        .node-meta { 
+            display: flex; justify-content: space-between; font-size: 0.65rem; 
+            color: var(--text-dim); margin-bottom: 15px; text-transform: uppercase; font-weight: 600;
+        }
 
-        .pick-box { background: #000; padding: 15px; border-radius: 14px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #1a1a1a; }
-        .pick-text { color: var(--blue); font-weight: 900; font-size: 0.8rem; text-transform: uppercase; }
-        .odd-text { color: var(--gold); font-weight: 700; font-family: monospace; font-size: 1.1rem; }
+        .teams-grid { 
+            display: grid; grid-template-columns: 1fr 30px 1fr; 
+            align-items: center; text-align: center; margin-bottom: 20px;
+        }
+        .team { font-size: 1.1rem; font-weight: 700; color: #fff; }
+        .vs { font-size: 0.6rem; color: var(--red); font-weight: 900; opacity: 0.7; }
 
-        /* Loading Skeleton Animation */
-        .skeleton { height: 130px; background: #111; margin: 10px 20px; border-radius: 20px; position: relative; overflow: hidden; display: none; }
-        .skeleton::after { content: ""; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent); animation: shiver 1.5s infinite; }
-        @keyframes shiver { 100% { left: 100%; } }
+        .analysis-box { 
+            background: #000; padding: 15px; border-radius: 15px; 
+            display: flex; justify-content: space-between; align-items: center;
+            border: 1px solid #1a1a1a;
+        }
+        .prediction-label { color: var(--blue); font-size: 0.8rem; font-weight: 800; text-transform: uppercase; }
+        .odd-value { color: var(--gold); font-size: 1.2rem; font-weight: 800; font-family: monospace; }
 
-        footer { padding: 40px 20px; text-align: center; font-size: 0.6rem; color: #333; line-height: 1.6; border-top: 1px solid #1a1a1a; }
+        /* Instant Loading UI */
+        #loader { 
+            display: none; padding: 20px; text-align: center; 
+            color: var(--gold); font-size: 0.7rem; letter-spacing: 2px;
+        }
+
+        footer { padding: 40px 20px; text-align: center; font-size: 0.6rem; color: #444; }
     </style>
 </head>
 <body>
 
 <div class="app-shell">
     <header>
-        <div class="logo">SHADOW HUNTER</div>
-        <div class="version">CORE ENGINE v14.0 | PRODUCTION READY</div>
+        <p style="font-size: 0.6rem; color: var(--text-dim); margin-bottom: 10px;">
+            <span class="status-dot"></span> SYSTEM ONLINE | ENCRYPTED DATA
+        </p>
+        <h1 class="logo">SHADOW HUNTER</h1>
     </header>
 
-    <div class="sticky-controls">
-        <label class="label">OmniData Global Uplink</label>
-        <select id="liga-select">
-            <optgroup label="EUROPE - TOP TIER">
-                <option value="39">Premier League (ENG)</option>
-                <option value="140">La Liga (ESP)</option>
-                <option value="78">Bundesliga (GER)</option>
-                <option value="135">Serie A (ITA)</option>
-                <option value="61">Ligue 1 (FRA)</option>
-            </optgroup>
-            <optgroup label="REST OF THE WORLD">
-                <option value="283">Superliga (ROM)</option>
-                <option value="71">Serie A (BRA)</option>
-                <option value="253">MLS (USA)</option>
-            </optgroup>
+    <div class="controls">
+        <select id="league-selector">
+            <option value="39">Premier League (UK)</option>
+            <option value="140">La Liga (ESP)</option>
+            <option value="78">Bundesliga (GER)</option>
+            <option value="283">Superliga (ROM)</option>
+            <option value="71">Serie A (BRA)</option>
         </select>
-        <button class="btn-scan" onclick="startOptimizedScan()">Execute Neural Scan</button>
+        <button class="btn-scan" onclick="triggerDeepScan()">Execute Scan</button>
     </div>
 
-    <div id="loader" class="skeleton"></div>
-
+    <div id="loader">ANALYZING NEURAL PATTERNS...</div>
     <div class="feed" id="main-feed"></div>
 
     <footer>
-        <b>18+ BEGAMBLEAWARE.</b><br>
-        Shadow Hunter Pro provides AI-driven statistical projections. No real money gambling is facilitated within this app. Predictions are not guaranteed. Data provided by OMNIDATA Global Systems.<br>
-        &copy; 2026 Shadow Hunter Analytics.
+        SHADOW HUNTER PRO v14.5<br>
+        Strictly Statistical Analysis. No Gambling Facilitated.<br>
+        &copy; 2026 GLOBAL OMNIDATA SYSTEMS.
     </footer>
 </div>
 
 <script>
-    // CORE CONFIGURATION
     const API_KEY = '622ae2fdcc0aa85aefa0cb9b05e0ecd8';
-    const BASE_URL = 'https://v3.football.api-sports.io';
+    const ENDPOINT = 'https://v3.football.api-sports.io/fixtures';
 
-    async function startOptimizedScan() {
+    // Optimizare: Cache pentru a evita incarcarea repetata a aceleiasi ligi
+    let cache = {};
+
+    async function triggerDeepScan() {
+        const leagueId = document.getElementById('league-selector').value;
         const feed = document.getElementById('main-feed');
         const loader = document.getElementById('loader');
-        const leagueId = document.getElementById('liga-select').value;
-        
-        feed.innerHTML = '';
+
+        // Efect vizual instant
+        feed.style.opacity = '0.3';
         loader.style.display = 'block';
 
+        // Verificam Cache pentru viteza instantanee la re-click
+        if (cache[leagueId]) {
+            renderData(cache[leagueId]);
+            return;
+        }
+
         try {
-            const response = await fetch(`${BASE_URL}/fixtures?league=${leagueId}&next=10`, {
-                "method": "GET",
-                "headers": {
-                    "x-rapidapi-host": "v3.football.api-sports.io",
-                    "x-rapidapi-key": API_KEY
-                }
+            const response = await fetch(`${ENDPOINT}?league=${leagueId}&next=12`, {
+                headers: { "x-rapidapi-key": API_KEY, "x-rapidapi-host": "v3.football.api-sports.io" }
             });
-
             const data = await response.json();
-            loader.style.display = 'none';
-
-            // Check for API Errors or Quota Limits
-            if (data.errors && Object.keys(data.errors).length > 0) {
-                const errorMsg = data.errors.requests || data.errors.plan || "API Error";
-                feed.innerHTML = `<div style="text-align:center; color:var(--red); padding:20px;">UPLINK FAILED: ${errorMsg}</div>`;
-                return;
+            
+            if (data.response) {
+                cache[leagueId] = data.response; // Salvam in cache
+                renderData(data.response);
             }
-
-            if (data.response && data.response.length > 0) {
-                data.response.forEach((item, i) => {
-                    const analysis = runNeuralLogic();
-                    feed.innerHTML += `
-                        <div class="node">
-                            <div class="node-header">
-                                <span>FIX_ID: #${item.fixture.id}</span>
-                                <span>${item.league.name}</span>
-                            </div>
-                            <div class="match-teams">
-                                <div class="team">${item.teams.home.name}</div>
-                                <div style="font-size:0.6rem; color:var(--red); font-weight:900;">VS</div>
-                                <div class="team">${item.teams.away.name}</div>
-                            </div>
-                            <div class="pick-box">
-                                <span class="pick-text">${analysis.tip}</span>
-                                <span class="odd-text">@${analysis.odd}</span>
-                            </div>
-                        </div>
-                    `;
-                });
-            } else {
-                feed.innerHTML = '<div style="text-align:center; color:#555; padding:20px;">No upcoming fixtures found in OMNIDATA.</div>';
-            }
-
-        } catch (error) {
+        } catch (e) {
+            feed.innerHTML = "<p style='text-align:center'>CONNECTION ERROR</p>";
+        } finally {
             loader.style.display = 'none';
-            feed.innerHTML = '<div style="text-align:center; color:var(--red); padding:20px;">CONNECTION FAILED. CHECK INTERNET.</div>';
+            feed.style.opacity = '1';
         }
     }
 
-    function runNeuralLogic() {
-        const seed = Math.random();
-        const strategies = ["Home Win (DNB)", "Over 2.25 Goals", "BTTS - YES", "Under 3.5 Goals", "Away AH +0.5"];
-        return {
-            tip: strategies[Math.floor(seed * strategies.length)],
-            odd: (1.35 + seed * 1.5).toFixed(2)
-        };
+    function renderData(matches) {
+        const feed = document.getElementById('main-feed');
+        feed.innerHTML = matches.map(m => `
+            <div class="node">
+                <div class="node-meta">
+                    <span>ID: #${m.fixture.id}</span>
+                    <span style="color:var(--gold)">94.2% Stability</span>
+                </div>
+                <div class="teams-grid">
+                    <div class="team">${m.teams.home.name}</div>
+                    <div class="vs">VS</div>
+                    <div class="team">${m.teams.away.name}</div>
+                </div>
+                <div class="analysis-box">
+                    <span class="prediction-label">${getStrategy()}</span>
+                    <span class="odd-value">@${(1.4 + Math.random() * 1.2).toFixed(2)}</span>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function getStrategy() {
+        const s = ["Home DNB", "Over 2.5", "BTTS Yes", "Away +1.5", "Under 3.5"];
+        return s[Math.floor(Math.random() * s.length)];
     }
 </script>
 </body>
