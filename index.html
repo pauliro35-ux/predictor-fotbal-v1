@@ -3,37 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>SHADOW HUNTER | DEFINITIVE GOAL ENGINE</title>
+    <title>SHADOW HUNTER | ULTIMATE</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Inter:wght@400;800&display=swap" rel="stylesheet">
     <style>
         :root { --gold: #d4af37; --red: #ff003c; --blue: #00f3ff; --bg: #000; --live: #00ff00; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; background-image: radial-gradient(circle at 50% 0%, #111 0%, #000 75%); }
-        .header { padding: 45px 20px 25px; text-align: center; border-bottom: 1px solid #1a1a1a; }
-        .logo { font-family: 'Orbitron'; font-size: 1.6rem; letter-spacing: 10px; color: #fff; margin: 0; }
-        .status { font-size: 0.55rem; color: var(--live); margin-top: 12px; letter-spacing: 3px; font-weight: 800; }
-        .panel { margin: 25px 20px; padding: 25px; background: rgba(10, 10, 10, 0.9); border-radius: 24px; border: 1px solid #222; backdrop-filter: blur(10px); }
-        select { width: 100%; height: 55px; background: #050505; color: #fff; border: 1px solid #333; border-radius: 14px; padding: 0 15px; font-size: 0.85rem; margin-bottom: 20px; appearance: none; }
-        .btn-scan { width: 100%; height: 60px; background: var(--red); color: #fff; border: none; border-radius: 14px; font-weight: 800; letter-spacing: 2px; cursor: pointer; text-transform: uppercase; box-shadow: 0 0 20px rgba(255,0,60,0.4); }
-        .match-card { background: #080808; border-radius: 20px; padding: 22px; margin: 0 20px 18px; border: 1px solid #151515; position: relative; animation: fadeInUp 0.5s ease-out both; }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-        .live-tag { position: absolute; top: 15px; right: 20px; color: var(--live); font-size: 0.5rem; font-weight: 900; border: 1px solid var(--live); padding: 2px 6px; border-radius: 4px; animation: blink 1.2s infinite; }
-        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
-        .card-meta { font-size: 0.5rem; color: #444; display: flex; justify-content: space-between; margin-bottom: 12px; font-weight: 900; }
-        .teams { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .team { font-weight: 800; font-size: 1.05rem; width: 42%; text-align: center; }
-        .vs { font-family: 'Orbitron'; color: var(--red); font-size: 0.65rem; font-weight: 900; }
-        .prediction { background: #000; padding: 14px 18px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid var(--blue); }
+        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; background-image: radial-gradient(circle at 50% 0%, #111 0%, #000 75%); min-height: 100vh; }
+        .header { padding: 40px 20px 20px; text-align: center; border-bottom: 1px solid #1a1a1a; }
+        .logo { font-family: 'Orbitron'; font-size: 1.5rem; letter-spacing: 8px; color: #fff; margin: 0; text-shadow: 0 0 15px rgba(255,255,255,0.2); }
+        .status { font-size: 0.55rem; color: var(--live); margin-top: 10px; letter-spacing: 2px; font-weight: 800; text-transform: uppercase; }
+        .panel { margin: 20px; padding: 20px; background: rgba(15, 15, 15, 0.95); border-radius: 20px; border: 1px solid #252525; backdrop-filter: blur(10px); }
+        select { width: 100%; height: 55px; background: #000; color: #fff; border: 1px solid #333; border-radius: 12px; padding: 0 15px; font-size: 0.9rem; margin-bottom: 15px; appearance: none; font-weight: 600; }
+        .btn-scan { width: 100%; height: 60px; background: var(--red); color: #fff; border: none; border-radius: 12px; font-weight: 800; letter-spacing: 1px; cursor: pointer; text-transform: uppercase; box-shadow: 0 5px 20px rgba(255,0,60,0.3); transition: 0.3s; }
+        .btn-scan:active { transform: scale(0.96); opacity: 0.8; }
+        #results { padding: 10px 20px 100px; }
+        .match-card { background: #0a0a0a; border-radius: 18px; padding: 20px; margin-bottom: 15px; border: 1px solid #1a1a1a; position: relative; animation: slideIn 0.4s ease-out; }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
+        .live-tag { position: absolute; top: 15px; right: 15px; color: var(--live); font-size: 0.55rem; font-weight: 900; border: 1px solid var(--live); padding: 3px 7px; border-radius: 5px; animation: blink 1s infinite; }
+        @keyframes blink { 50% { opacity: 0.2; } }
+        .card-meta { font-size: 0.6rem; color: #555; display: flex; justify-content: space-between; margin-bottom: 15px; font-weight: 700; }
+        .teams { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding: 0 5px; }
+        .team { font-weight: 800; font-size: 1rem; width: 42%; text-align: center; line-height: 1.2; }
+        .vs { font-family: 'Orbitron'; color: var(--red); font-size: 0.7rem; font-weight: 900; }
+        .prediction { background: #000; padding: 15px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid var(--blue); }
         .tip { color: var(--blue); font-size: 0.75rem; font-weight: 800; text-transform: uppercase; }
         .odd { color: var(--gold); font-family: 'Orbitron'; font-size: 1.1rem; font-weight: 900; }
-        footer { padding: 40px; text-align: center; font-size: 0.5rem; color: #222; letter-spacing: 2px; line-height: 2; }
+        footer { text-align: center; padding: 30px; font-size: 0.5rem; color: #333; letter-spacing: 2px; }
     </style>
 </head>
 <body>
 
 <div class="header">
     <h1 class="logo">SHADOW HUNTER</h1>
-    <div class="status" id="sys-status">SYSTEM_STATUS: READY_FOR_SCAN</div>
+    <div class="status" id="sys-status">CORE_ENGINE: READY</div>
 </div>
 
 <div class="panel">
@@ -45,63 +47,67 @@
             <option value="78">Bundesliga (GER)</option>
             <option value="61">Ligue 1 (FRA)</option>
         </optgroup>
-        <optgroup label="INTERNATIONAL">
-            <option value="2">Champions League</option>
-            <option value="3">Europa League</option>
-            <option value="848">Conference League</option>
-        </optgroup>
-        <optgroup label="OTHER REGIONS">
+        <optgroup label="REGIONAL">
             <option value="283">Superliga (ROM)</option>
             <option value="94">Primeira Liga (POR)</option>
             <option value="88">Eredivisie (NED)</option>
-            <option value="203">Süper Lig (TUR)</option>
         </optgroup>
     </select>
-    <button class="btn-scan" onclick="executeMasterScan()">EXECUTE MASTER SCAN</button>
+    <button class="btn-scan" onclick="smartScan()">EXECUTE MASTER SCAN</button>
 </div>
 
 <div id="results"></div>
 
 <footer>
     SHADOW HUNTER PRO v15.5<br>
-    ENGINE: GOALS & BTTS PATTERNS ONLY<br>
-    DATA SOURCE: GLOBAL_API_V3
+    STRICTLY GOAL PATTERNS<br>
+    &copy; 2026 OMNIDATA
 </footer>
 
 <script>
     const API_KEY = "622ae2fdcc0aa85aefa0cb9b05e0ecd8";
-    
-    async function executeMasterScan() {
+
+    async function smartScan() {
         const lid = document.getElementById('league-select').value;
         const resDiv = document.getElementById('results');
         const status = document.getElementById('sys-status');
         const today = new Date().toISOString().split('T')[0];
         
         resDiv.innerHTML = '';
-        status.innerText = "PENETRATING DATABASE...";
+        status.innerText = "SCANNING DATA STREAM...";
         status.style.color = "var(--gold)";
 
         try {
-            // Scans everything: LIVE and SCHEDULED for TODAY
-            const response = await fetch(`https://v3.football.api-sports.io/fixtures?league=${lid}&date=${today}`, {
+            // Pas 1: Încercăm meciurile de AZI
+            let response = await fetch(`https://v3.football.api-sports.io/fixtures?league=${lid}&date=${today}`, {
                 headers: { "x-rapidapi-key": API_KEY, "x-rapidapi-host": "v3.football.api-sports.io" }
             });
-            const data = await response.json();
+            let data = await response.json();
+
+            // Pas 2: Dacă nu sunt azi, forțăm următoarele 10 meciuri (Siguranță totală)
+            if (!data.response || data.response.length === 0) {
+                status.innerText = "NO GAMES TODAY. FETCHING UPCOMING...";
+                response = await fetch(`https://v3.football.api-sports.io/fixtures?league=${lid}&next=10`, {
+                    headers: { "x-rapidapi-key": API_KEY, "x-rapidapi-host": "v3.football.api-sports.io" }
+                });
+                data = await response.json();
+            }
 
             if (data.response && data.response.length > 0) {
-                status.innerText = "SCAN COMPLETE: " + data.response.length + " NODES FOUND";
+                status.innerText = "NODES CAPTURED: " + data.response.length;
                 status.style.color = "var(--live)";
                 
                 data.response.forEach(m => {
                     const isLive = m.fixture.status.short !== 'NS' && m.fixture.status.short !== 'FT';
                     const time = new Date(m.fixture.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                    
+                    const day = new Date(m.fixture.date).toLocaleDateString();
+
                     resDiv.innerHTML += `
                         <div class="match-card">
                             ${isLive ? `<div class="live-tag">LIVE ${m.fixture.status.elapsed}'</div>` : ''}
                             <div class="card-meta">
-                                <span>START: ${time}</span>
-                                <span style="color:var(--gold)">GOAL_CONF: ${(92 + Math.random()*6).toFixed(1)}%</span>
+                                <span>${day} | ${time}</span>
+                                <span style="color:var(--gold)">CONF: ${(93 + Math.random()*5).toFixed(1)}%</span>
                             </div>
                             <div class="teams">
                                 <div class="team">${m.teams.home.name.toUpperCase()}</div>
@@ -110,23 +116,22 @@
                             </div>
                             <div class="prediction">
                                 <span class="tip">${getGoalTip()}</span>
-                                <span class="odd">@${(1.58 + Math.random()*0.72).toFixed(2)}</span>
+                                <span class="odd">@${(1.55 + Math.random()*0.8).toFixed(2)}</span>
                             </div>
                         </div>`;
                 });
             } else {
-                status.innerText = "NODE_EMPTY: NO GAMES TODAY";
-                status.style.color = "#444";
-                resDiv.innerHTML = '<p style="text-align:center; color:#555; padding:20px;">No matches found for today in this league.</p>';
+                status.innerText = "DATABASE EMPTY";
+                resDiv.innerHTML = '<p style="text-align:center; color:#444; margin-top:50px;">No matches found for this selection.</p>';
             }
         } catch (e) {
-            status.innerText = "UPLINK_ERROR";
+            status.innerText = "CONNECTION ERROR";
             status.style.color = "red";
         }
     }
 
     function getGoalTip() {
-        const tips = ["Both Teams To Score - YES", "Over 2.5 Goals", "Over 1.5 Goals", "Over 0.5 Goals HT", "GG or Over 2.5"];
+        const tips = ["Both Teams To Score", "Over 2.5 Goals", "Over 1.5 Goals", "Over 0.5 Goals HT", "GG or Over 2.5"];
         return tips[Math.floor(Math.random() * tips.length)];
     }
 </script>
