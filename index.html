@@ -1,118 +1,105 @@
 <!DOCTYPE html>
-<html lang="ro">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SHADOW HUNTER AI | Predictor Fotbal & Superliga România</title>
-    <meta name="description" content="Predictor fotbal bazat pe Inteligență Artificială. Analiză avansată pentru Superliga, Premier League și ponturi zilnice de top.">
-    <meta name="keywords" content="ponturi fotbal, predictor ai, statistici fotbal romania, superliga live, shadow hunter ai">
+    <title>SHADOW HUNTER AI | Professional Football Predictor</title>
+    <meta name="description" content="Advanced AI-powered football predictions. Analyzing Premier League, La Liga, and Superliga with high accuracy.">
     
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Inter:wght@400;800&display=swap" rel="stylesheet">
     <style>
-        :root { --gold: #d4af37; --red: #ff003c; --blue: #00f3ff; --bg: #000; --panel: #0a0a0a; }
+        :root { --gold: #d4af37; --red: #ff003c; --blue: #00f3ff; --bg: #000; }
         body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; overflow-x: hidden; }
         
-        /* Header cu efect de scanare */
-        .header { padding: 50px 20px; text-align: center; border-bottom: 1px solid #1a1a1a; position: relative; }
-        .logo { font-family: 'Orbitron'; font-size: 1.8rem; letter-spacing: 10px; margin: 0; background: linear-gradient(to bottom, #fff, #555); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        #sys-status { font-size: 0.6rem; color: #0f0; margin-top: 15px; letter-spacing: 3px; font-weight: 800; }
+        .header { padding: 45px 20px; text-align: center; border-bottom: 1px solid #111; position: relative; }
+        .logo { font-family: 'Orbitron'; font-size: 1.6rem; letter-spacing: 8px; margin: 0; background: linear-gradient(to right, #fff, #666); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        #sys-status { font-size: 0.55rem; color: #0f0; margin-top: 10px; letter-spacing: 2px; font-weight: 800; }
 
-        .panel { margin: 20px; padding: 25px; background: var(--panel); border-radius: 20px; border: 1px solid #222; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .panel { margin: 20px; padding: 25px; background: #080808; border-radius: 20px; border: 1px solid #222; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         
-        select { width: 100%; height: 60px; background: #000; color: #fff; border: 1px solid #333; border-radius: 12px; font-size: 1rem; margin-bottom: 20px; padding: 0 15px; font-weight: 800; font-family: 'Orbitron'; }
+        select { width: 100%; height: 60px; background: #000; color: #fff; border: 1px solid #333; border-radius: 12px; font-size: 1rem; margin-bottom: 20px; padding: 0 15px; font-family: 'Orbitron'; cursor: pointer; }
         
-        .btn-scan { width: 100%; height: 70px; background: var(--red); color: #fff; border: none; border-radius: 12px; font-weight: 900; text-transform: uppercase; cursor: pointer; box-shadow: 0 0 25px rgba(255,0,62,0.5); transition: 0.3s; font-size: 1.1rem; }
-        .btn-scan:active { transform: scale(0.98); box-shadow: 0 0 10px rgba(255,0,62,0.8); }
+        .btn-scan { width: 100%; height: 70px; background: var(--red); color: #fff; border: none; border-radius: 12px; font-weight: 900; text-transform: uppercase; cursor: pointer; box-shadow: 0 0 25px rgba(255,0,62,0.4); transition: 0.3s; font-size: 1.1rem; }
+        .btn-scan:active { transform: scale(0.98); }
 
-        #results { padding: 10px 20px 120px; }
+        #results { padding: 0 20px 20px; min-height: 100px; }
         
-        /* Match Cards */
-        .match-card { background: #0d0d0d; border-radius: 18px; padding: 20px; margin-bottom: 20px; border: 1px solid #1f1f1f; position: relative; overflow: hidden; }
-        .match-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--blue); }
+        .match-card { background: #0a0a0a; border-radius: 18px; padding: 22px; margin-bottom: 20px; border: 1px solid #1a1a1a; border-left: 4px solid var(--blue); animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
-        .date { font-size: 0.65rem; color: #555; margin-bottom: 12px; font-family: 'Orbitron'; }
         .teams { display: flex; justify-content: space-between; align-items: center; margin: 15px 0; font-weight: 800; font-size: 1.1rem; }
-        .vs { color: var(--red); font-size: 0.8rem; font-family: 'Orbitron'; }
+        .vs { color: var(--red); font-size: 0.75rem; font-family: 'Orbitron'; }
         
-        .prediction-box { background: #050505; padding: 18px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #151515; }
-        .tip { color: var(--blue); font-weight: 900; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
+        .prediction { background: #050505; padding: 18px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #151515; }
+        .tip { color: var(--blue); font-weight: 900; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; }
         .odd { color: var(--gold); font-family: 'Orbitron'; font-weight: 900; font-size: 1.2rem; }
 
-        /* App Download Section - Esențial pentru profit */
-        .app-promo { text-align: center; padding: 40px 20px; background: linear-gradient(0deg, #000, #0a0a0a); border-top: 1px solid #222; }
-        .btn-app { display: inline-block; background: #fff; color: #000; padding: 18px 35px; border-radius: 15px; text-decoration: none; font-weight: 900; font-size: 0.9rem; text-transform: uppercase; margin-top: 15px; box-shadow: 0 0 20px rgba(255,255,255,0.2); }
+        /* DOWNLOAD SECTION */
+        .app-footer { text-align: center; padding: 40px 20px 100px; background: linear-gradient(0deg, #000, #080808); border-top: 1px solid #111; }
+        .promo-text { color: #555; font-size: 0.75rem; letter-spacing: 1px; margin-bottom: 20px; text-transform: uppercase; }
+        .btn-google-play { display: inline-block; background: #fff; color: #000; padding: 18px 35px; border-radius: 15px; text-decoration: none; font-weight: 900; font-size: 0.9rem; text-transform: uppercase; box-shadow: 0 5px 15px rgba(255,255,255,0.1); transition: 0.3s; }
+        .btn-google-play:hover { background: var(--blue); transform: translateY(-3px); }
+        .privacy-link { display: block; margin-top: 30px; color: #333; font-size: 0.7rem; text-decoration: none; text-transform: uppercase; }
     </style>
 </head>
 <body>
 
     <div class="header">
         <h1 class="logo">SHADOW HUNTER</h1>
-        <div id="sys-status">SCRAPER_READY // MODE: AI_INFERENCE</div>
+        <div id="sys-status">CORE_V15_READY // AI_ENGINE: ACTIVE</div>
     </div>
 
     <div class="panel">
         <select id="league-select">
-            <option value="RO">SUPERLIGA ROMÂNIA</option>
-            <option value="UK">PREMIER LEAGUE</option>
-            <option value="ES">LA LIGA</option>
-            <option value="DE">BUNDESLIGA</option>
+            <option value="RO">SUPERLIGA (ROMANIA)</option>
+            <option value="UK">PREMIER LEAGUE (UK)</option>
+            <option value="ES">LA LIGA (SPAIN)</option>
+            <option value="IT">SERIE A (ITALY)</option>
+            <option value="DE">BUNDESLIGA (GERMANY)</option>
         </select>
-        <button class="btn-scan" onclick="simulateScraper()">EXECUTE DATA SCRAPE</button>
+        <button class="btn-scan" onclick="startScan()">EXECUTE MASTER SCAN</button>
     </div>
 
     <div id="results">
         </div>
 
-    <div class="app-promo">
-        <p style="color: #666; font-size: 0.8rem;">PENTRU ANALIZĂ COMPLETĂ ȘI NOTIFICĂRI PUSH</p>
-        <a href="https://play.google.com/store/apps/details?id=com.shadowhunter.ai.studio" class="btn-app">
-            DESCARCĂ APLICAȚIA PRO
+    <div class="app-footer">
+        <p class="promo-text">Get Full AI Analysis & Live Alerts</p>
+        <a href="https://play.google.com/store/apps/details?id=com.shadowhunter.goalpredictopro" class="btn-google-play">
+            Download on Google Play
         </a>
-        <div style="margin-top: 20px;">
-            <a href="privacy.html" style="color:#333; font-size:0.7rem; text-decoration:none;">PRIVACY POLICY</a>
-        </div>
+        <a href="privacy.html" class="privacy-link">Privacy Policy</a>
     </div>
 
     <script>
-        // Am eliminat complet API_KEY. 
-        // Când vei avea Scraper-ul tău, vei înlocui această funcție cu un apel fetch către JSON-ul tău generat.
-        
-        function simulateScraper() {
+        function startScan() {
             const res = document.getElementById('results');
             const status = document.getElementById('sys-status');
-            const league = document.getElementById('league-select').value;
+            const league = document.getElementById('league-select').options[document.getElementById('league-select').selectedIndex].text;
             
-            status.innerText = "SCRAPING_DATA_FOR_" + league + "...";
-            res.innerHTML = "<p style='text-align:center; color:var(--gold); font-family:Orbitron; font-size:0.8rem; margin-top:40px;'>BYPASSING FIREWALLS...</p>";
+            status.innerText = "SCANNING_NODES_FOR_" + league.replace(" ", "_");
+            res.innerHTML = "<p style='text-align:center; color:var(--gold); font-family:Orbitron; font-size:0.75rem; margin-top:30px;'>PENETRATING DATABASE...</p>";
             
-            // Simulăm un delay de scraper (2 secunde)
             setTimeout(() => {
                 status.innerText = "DATABASE_SYNCED // " + league;
-                res.innerHTML = "";
-                
-                // Demo de date (Aici vei face fetch la fisierul JSON produs de scraper-ul tău)
-                const mockMatches = [
-                    { h: "FCSB", a: "CFR Cluj", t: "GG & Over 2.5", o: "2.10" },
-                    { h: "Farul", a: "Univ. Craiova", t: "BTTS - YES", o: "1.85" }
-                ];
-
-                mockMatches.forEach(m => {
-                    res.innerHTML += `
-                        <div class="match-card">
-                            <div class="date">DATA_STREAM: ${new Date().toLocaleDateString()}</div>
-                            <div class="teams">
-                                <span>${m.h}</span>
-                                <span class="vs">VS</span>
-                                <span>${m.a}</span>
-                            </div>
-                            <div class="prediction-box">
-                                <span class="tip">${m.t}</span>
-                                <span class="odd">@${m.o}</span>
-                            </div>
-                        </div>`;
-                });
+                res.innerHTML = `
+                    <div class="match-card">
+                        <div style="font-size:0.6rem; color:#444; margin-bottom:12px; font-family:Orbitron;">STREAM_DATE: ${new Date().toLocaleDateString()}</div>
+                        <div class="teams">
+                            <span>HOME TEAM</span>
+                            <span class="vs">VS</span>
+                            <span>AWAY TEAM</span>
+                        </div>
+                        <div class="prediction">
+                            <span class="tip">AI TARGET: OVER 2.5 GOALS</span>
+                            <span class="odd">@1.85</span>
+                        </div>
+                    </div>
+                    <p style="text-align:center; font-size:0.65rem; color:#333; font-weight:800;">[ ! ] DOWNLOAD THE APP FOR THE FULL MATCH LIST</p>`;
             }, 1500);
         }
     </script>
+
 </body>
 </html>
+
